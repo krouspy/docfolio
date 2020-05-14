@@ -5,7 +5,12 @@ const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME;
 const COLLECTION_NAME = process.env.COLLECTION_NAME;
 
-const find_all = (req, res) => {
+const capitalize = s => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+const find_category = (req, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -16,8 +21,17 @@ const find_all = (req, res) => {
       return;
     }
 
+    const category = capitalize(req.params.category);
+    const query = {};
+
+    if (category !== 'All') {
+      query.category = category;
+    }
+
+    console.log(`finding category ${category}`);
+
     const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
-    collection.find({}, { projection: { _id: 0 } }).toArray((error, docs) => {
+    collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
       res.send({
@@ -81,29 +95,17 @@ const find_categories = (req, res) => {
         });
         return;
       }
-      result = ['General'].concat(result);
+      result = ['All'].concat(result);
       res.send({
         statusCode: 200,
         result: result,
       });
     });
-    /*
-    collection
-      .find({}, { projection: { category: 1, _id: 0 } })
-      .toArray((error, docs) => {
-        assert.equal(null, error);
-        client.close();
-        res.send({
-          statusCode: 200,
-          result: docs,
-        });
-      });
-    */
   });
 };
 
 module.exports = {
-  find_all,
-  insert_one,
+  find_category,
   find_categories,
+  insert_one,
 };
