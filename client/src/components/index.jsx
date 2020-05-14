@@ -35,7 +35,7 @@ export default () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const url = `http://localhost:3000/all`;
+    const url = `http://localhost:3000/api/all`;
     fetch(url)
       .then(response => response.json())
       .then(response => {

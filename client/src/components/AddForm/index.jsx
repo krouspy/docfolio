@@ -13,7 +13,7 @@ export default ({ open, handleOpen }) => {
   const add = () => {
     if (url && category) {
       console.log(url);
-      const postURL = 'http://localhost:3000/add';
+      const postURL = 'http://localhost:3000/api/add';
       const options = {
         method: 'POST',
         headers: {
