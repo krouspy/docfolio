@@ -41,7 +41,7 @@ export default () => {
       .then(response => {
         console.log(response);
         const result = response.result;
-        setData(result.concat(result).concat(result));
+        setData(result);
       })
       .catch(error => console.error(error));
   }, []);
@@ -55,7 +55,7 @@ export default () => {
           <Grid container spacing={4}>
             {data.map((element, id) => (
               <Grid item key={id} xs={12} sm={6} md={4}>
-                <MicroLink url={element.uri} size="large" />
+                <MicroLink url={element.url} size="large" />
               </Grid>
             ))}
           </Grid>
