@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import AddForm from '../AddForm';
@@ -45,9 +45,15 @@ export default () => {
         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
           Tezos
         </Typography>
-        <IconButton onClick={handleOpen} className={classes.button} size="large" color="inherit">
-          <AddCircleIcon />
-        </IconButton>
+        <Button
+          onClick={handleOpen}
+          className={classes.button}
+          size="large"
+          color="inherit"
+          startIcon={<AddCircleIcon />}
+        >
+          Add
+        </Button>
         <AddForm open={open} handleOpen={handleOpen} />
       </Toolbar>
     </AppBar>
