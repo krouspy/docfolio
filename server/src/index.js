@@ -12,6 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(routes);
+app.use('/api', routes);
 
 app.listen(PORT, () => console.log(`Server listening in PORT ${PORT}`));
