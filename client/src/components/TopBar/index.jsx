@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+// import { Link } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -27,7 +29,19 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles();
+  const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const url = 'http://localhost:3000/api/categories';
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        setCategories(response.result);
+      })
+      .catch(error => console.error(error));
+  }, []);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -36,15 +50,19 @@ export default () => {
   return (
     <AppBar position="sticky" className={classes.appBar}>
       <Toolbar variant="regular" className={classes.toolbar}>
-        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-          General
-        </Typography>
-        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-          Ethereum
-        </Typography>
-        <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-          Tezos
-        </Typography>
+        {categories.map((category, index) => (
+          <Link
+            key={index}
+            href={'/' + category}
+            color="inherit"
+            className={classes.title}
+            variant="h6"
+          >
+            {/* <Typography className={classes.title} variant="h6" color="inherit" noWrap> */}
+            {category}
+            {/* </Typography> */}
+          </Link>
+        ))}
         <Button
           onClick={handleOpen}
           className={classes.button}
