@@ -6,11 +6,11 @@ export default () => {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          <Redirect to="/all" />
+        </Route>
         <Route path="/:category">
           <Home />
-        </Route>
-        <Route path="/">
-          <Redirect to="/all" />
         </Route>
       </Switch>
     </Router>

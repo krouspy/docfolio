@@ -9,8 +9,10 @@ import MicroLink from '@microlink/react';
 import TopBar from '../TopBar';
 
 const useStyles = makeStyles(theme => ({
-  main: {
+  root: {
+    minHeight: '100vh',
     backgroundColor: '#1e2732',
+    overflow: 'auto',
   },
   cardGrid: {
     paddingTop: theme.spacing(4),
@@ -47,13 +49,13 @@ export default () => {
         setData(result);
       })
       .catch(error => console.error(error));
-  }, []);
+  }, [category]);
 
   return (
-    <React.Fragment>
+    <div className={classes.root}>
       <CssBaseline />
       <TopBar />
-      <main className={classes.main}>
+      <main>
         <Container className={classes.cardGrid}>
           <Grid container spacing={4}>
             {data.map((element, id) => (
@@ -64,6 +66,6 @@ export default () => {
           </Grid>
         </Container>
       </main>
-    </React.Fragment>
+    </div>
   );
 };

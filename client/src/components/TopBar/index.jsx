@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-// import { Link } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -51,17 +50,11 @@ export default () => {
     <AppBar position="sticky" className={classes.appBar}>
       <Toolbar variant="regular" className={classes.toolbar}>
         {categories.map((category, index) => (
-          <Link
-            key={index}
-            href={'/' + category}
-            color="inherit"
-            className={classes.title}
-            variant="h6"
-          >
-            {/* <Typography className={classes.title} variant="h6" color="inherit" noWrap> */}
-            {category}
-            {/* </Typography> */}
-          </Link>
+          <Typography className={classes.title} variant="h6" noWrap>
+            <Link key={index} to={`/${category}`} style={{ color: 'inherit' }}>
+              {category}
+            </Link>
+          </Typography>
         ))}
         <Button
           onClick={handleOpen}
