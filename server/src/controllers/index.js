@@ -36,7 +36,7 @@ const insert_one = (req, res) => {
       console.log(err);
       res.send({
         statusCode: 500,
-        result: 'Error: MongoClient failed',
+        result: 'Error Insert: MongoClient failed',
       });
       return;
     }
@@ -47,7 +47,7 @@ const insert_one = (req, res) => {
         console.log('error', error);
         res.send({
           statusCode: 500,
-          result: 'Fail: insertOne route',
+          result: 'Error Insert: insertOne route',
         });
         return;
       }
@@ -60,7 +60,50 @@ const insert_one = (req, res) => {
   });
 };
 
+const find_categories = (req, res) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Categories: MongoClient failed',
+      });
+      return;
+    }
+
+    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
+    collection.distinct('category', (error, result) => {
+      if (error) {
+        console.log(error);
+        res.send({
+          statusCode: 500,
+          result: 'Error Categories: MongoClient failed',
+        });
+        return;
+      }
+      result = ['General'].concat(result);
+      res.send({
+        statusCode: 200,
+        result: result,
+      });
+    });
+    /*
+    collection
+      .find({}, { projection: { category: 1, _id: 0 } })
+      .toArray((error, docs) => {
+        assert.equal(null, error);
+        client.close();
+        res.send({
+          statusCode: 200,
+          result: docs,
+        });
+      });
+    */
+  });
+};
+
 module.exports = {
   find_all,
   insert_one,
+  find_categories,
 };
