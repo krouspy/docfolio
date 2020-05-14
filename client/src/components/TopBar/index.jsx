@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/Button';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -15,9 +17,13 @@ const useStyles = makeStyles(theme => ({
   title: {
     marginRight: theme.spacing(2),
   },
+  button: {
+    position: 'absolute',
+    right: 50,
+  },
 }));
 
-const TopBar = () => {
+export default () => {
   const classes = useStyles();
 
   return (
@@ -32,9 +38,10 @@ const TopBar = () => {
         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
           Tezos
         </Typography>
+        <IconButton size="large" className={classes.button} color="inherit">
+          <AddCircleIcon />
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
 };
-
-export default TopBar;

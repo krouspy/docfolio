@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const App = () => {
+export default () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
 
@@ -64,5 +64,3 @@ const App = () => {
     </React.Fragment>
   );
 };
-
-export default App;
