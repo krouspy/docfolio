@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+import AddForm from '../AddForm';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -25,6 +27,11 @@ const useStyles = makeStyles(theme => ({
 
 export default () => {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
   return (
     <AppBar position="sticky" className={classes.appBar}>
@@ -38,9 +45,10 @@ export default () => {
         <Typography className={classes.title} variant="h6" color="inherit" noWrap>
           Tezos
         </Typography>
-        <IconButton size="large" className={classes.button} color="inherit">
+        <IconButton onClick={handleOpen} className={classes.button} size="large" color="inherit">
           <AddCircleIcon />
         </IconButton>
+        <AddForm open={open} handleOpen={handleOpen} />
       </Toolbar>
     </AppBar>
   );
