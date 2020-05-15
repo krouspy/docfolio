@@ -32,38 +32,6 @@ const find_category = (req, res) => {
   });
 };
 
-const insert_one = (req, res) => {
-  const { url, category } = req.body;
-
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Insert: MongoClient failed',
-      });
-      return;
-    }
-
-    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
-    collection.insertOne({ url, category }, (error, result) => {
-      if (error) {
-        console.log('error', error);
-        res.send({
-          statusCode: 500,
-          result: 'Error Insert: insertOne route',
-        });
-        return;
-      }
-
-      res.send({
-        statusCode: 200,
-        result: 'insertOne route',
-      });
-    });
-  });
-};
-
 const find_categories = (req, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
@@ -88,6 +56,39 @@ const find_categories = (req, res) => {
       res.send({
         statusCode: 200,
         result: result,
+      });
+    });
+  });
+};
+
+const insert_one = (req, res) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Insert: MongoClient failed',
+      });
+      return;
+    }
+
+    const { url } = req.body;
+    const category = req.body.category.toLowerCase();
+
+    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
+    collection.insertOne({ url, category }, (error, result) => {
+      if (error) {
+        console.log('error', error);
+        res.send({
+          statusCode: 500,
+          result: 'Error Insert: insertOne route',
+        });
+        return;
+      }
+
+      res.send({
+        statusCode: 200,
+        result: 'insertOne route',
       });
     });
   });
