@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import MicroLink from '@microlink/react';
 
 import TopBar from '../TopBar';
+import Drawer from '../Drawer';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
   const { category } = useParams();
 
   useEffect(() => {
@@ -47,10 +49,15 @@ export default () => {
       .catch(error => console.error(error));
   }, [category]);
 
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <TopBar />
+      <TopBar open={open} handleOpen={handleOpen} />
+      <Drawer open={open} handleOpen={handleOpen} />
       <main>
         <Container className={classes.cardGrid}>
           <Grid container spacing={4}>
