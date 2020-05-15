@@ -32,7 +32,7 @@ const find_category = (req, res) => {
   });
 };
 
-const find_categories = (req, res) => {
+const find_categories = (_, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
