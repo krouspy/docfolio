@@ -19,6 +19,9 @@
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.0.5"
   },
+  "alias": {
+    "#utils": "./src/utils"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

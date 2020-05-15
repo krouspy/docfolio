@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import AddForm from '../AddForm';
+import { capitalize } from '#utils';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -29,11 +30,6 @@ const useStyles = makeStyles(theme => ({
     color: 'inherit',
   },
 }));
-
-const capitalize = s => {
-  if (typeof s !== 'string') return '';
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 export default () => {
   const classes = useStyles();

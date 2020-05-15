@@ -10,6 +10,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import LinkIcon from '@material-ui/icons/Link';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 
+import { capitalize } from '#utils';
+
 export default ({ open, handleOpen, categories }) => {
   const [url, setURL] = useState('');
   const [category, setCategory] = useState(categories[0]);
@@ -73,7 +75,7 @@ export default ({ open, handleOpen, categories }) => {
         >
           {categories.map(option => (
             <MenuItem key={option} value={option}>
-              {option}
+              {capitalize(option)}
             </MenuItem>
           ))}
         </TextField>
