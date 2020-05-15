@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,6 +24,10 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     right: 50,
   },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+  },
 }));
 
 export default () => {
@@ -36,7 +40,6 @@ export default () => {
     fetch(url)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
         setCategories(response.result);
       })
       .catch(error => console.error(error));
@@ -50,10 +53,10 @@ export default () => {
     <AppBar position="sticky" className={classes.appBar}>
       <Toolbar variant="regular" className={classes.toolbar}>
         {categories.map((category, index) => (
-          <Typography className={classes.title} variant="h6" noWrap>
-            <Link key={index} to={`/${category}`} style={{ color: 'inherit' }}>
+          <Typography key={index} className={classes.title} variant="h6" noWrap>
+            <NavLink to={`/${category}`} className={classes.link} activeStyle={{ color: 'teal' }}>
               {category}
-            </Link>
+            </NavLink>
           </Typography>
         ))}
         <Button
@@ -65,7 +68,7 @@ export default () => {
         >
           Add
         </Button>
-        <AddForm open={open} handleOpen={handleOpen} />
+        <AddForm open={open} handleOpen={handleOpen} categories={categories} />
       </Toolbar>
     </AppBar>
   );
