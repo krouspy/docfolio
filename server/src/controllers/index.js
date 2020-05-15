@@ -5,11 +5,6 @@ const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME;
 const COLLECTION_NAME = process.env.COLLECTION_NAME;
 
-const capitalize = s => {
-  if (typeof s !== 'string') return '';
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
-
 const find_category = (req, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
@@ -21,14 +16,12 @@ const find_category = (req, res) => {
       return;
     }
 
-    const category = capitalize(req.params.category);
+    const category = req.params.category;
     const query = {};
 
     if (category !== 'All') {
       query.category = category;
     }
-
-    console.log(`finding category ${category}`);
 
     const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
     collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
