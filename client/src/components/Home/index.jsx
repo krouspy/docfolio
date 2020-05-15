@@ -12,7 +12,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     minHeight: '100vh',
     backgroundColor: '#1e2732',
-    overflow: 'auto',
   },
   cardGrid: {
     paddingTop: theme.spacing(4),
@@ -37,16 +36,13 @@ export default () => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const { category } = useParams();
-  console.log(category);
 
   useEffect(() => {
     const url = `http://localhost:3000/api/category/${category}`;
     fetch(url)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
-        const result = response.result;
-        setData(result);
+        setData(response.result);
       })
       .catch(error => console.error(error));
   }, [category]);
