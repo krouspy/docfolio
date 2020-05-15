@@ -16,12 +16,9 @@ const find_category = (req, res) => {
       return;
     }
 
-    const category = req.params.category;
-    const query = {};
-
-    if (category !== 'All') {
-      query.category = category;
-    }
+    const query = {
+      category: req.params.category,
+    };
 
     const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
     collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
@@ -88,7 +85,6 @@ const find_categories = (req, res) => {
         });
         return;
       }
-      result = ['All'].concat(result);
       res.send({
         statusCode: 200,
         result: result,

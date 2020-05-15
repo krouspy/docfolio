@@ -30,6 +30,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const capitalize = s => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 export default () => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
@@ -55,7 +60,7 @@ export default () => {
         {categories.map((category, index) => (
           <Typography key={index} className={classes.title} variant="h6" noWrap>
             <NavLink to={`/${category}`} className={classes.link} activeStyle={{ color: 'teal' }}>
-              {category}
+              {capitalize(category)}
             </NavLink>
           </Typography>
         ))}

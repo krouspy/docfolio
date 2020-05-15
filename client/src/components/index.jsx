@@ -7,7 +7,7 @@ export default () => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/All" />
+          <Redirect to="/ethereum" />
         </Route>
         <Route path="/:category">
           <Home />
