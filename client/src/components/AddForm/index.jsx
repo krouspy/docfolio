@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import LinkIcon from '@material-ui/icons/Link';
-import ViewModuleIcon from '@material-ui/icons/ViewModule';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { capitalize } from '#utils';
 
-export default ({ open, handleOpen, categories }) => {
-  const [url, setURL] = useState('');
-  const [category, setCategory] = useState(categories[0]);
+const useStyles = makeStyles({
+  categoryButton: {
+    marginRight: -12,
+  },
+});
 
-  useEffect(() => {
-    setCategory(categories[0]);
-  }, [categories]);
+export default ({ open, handleOpen, categories }) => {
+  const classes = useStyles();
+
+  const [url, setURL] = useState('');
+  const [category, setCategory] = useState('');
+  const [newCategory, setNewCategory] = useState(false);
 
   const add = () => {
     if (url && category) {
@@ -52,23 +59,41 @@ export default ({ open, handleOpen, categories }) => {
     setCategory(event.target.value);
   };
 
+  const handleNewCategory = () => {
+    setNewCategory(!newCategory);
+  };
+
   return (
-    <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
+    <Dialog
+      open={open}
+      onClose={handleOpen}
+      maxWidth="xs"
+      fullWidth
+      aria-labelledby="form-dialog-title"
+    >
       <DialogTitle id="form-dialog-title">Add Source</DialogTitle>
       <DialogContent dividers>
         <TextField
-          select
           autoFocus
+          fullWidth
+          select={!newCategory}
           value={category}
           onChange={handleCategory}
-          label="category"
+          label={newCategory ? 'Create Category' : 'Select Category'}
           variant="outlined"
           margin="dense"
-          fullWidth
+          helperText="Click on left icon to Select or Create a category"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <ViewModuleIcon />
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={handleNewCategory}
+                  className={classes.categoryButton}
+                >
+                  <AddCircleIcon />
+                </IconButton>
               </InputAdornment>
             ),
           }}
