@@ -7,7 +7,7 @@ export default () => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/all" />
+          <Redirect to="/All" />
         </Route>
         <Route path="/:category">
           <Home />
