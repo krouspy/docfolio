@@ -3,7 +3,8 @@ const assert = require('assert').strict;
 
 const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME;
-const COLLECTION_NAME = process.env.COLLECTION_NAME;
+const COL_RESOURCES = process.env.COL_RESOURCES;
+const COL_WORKSPACES = process.env.COL_WORKSPACES;
 
 const find_category = (req, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
@@ -20,7 +21,7 @@ const find_category = (req, res) => {
       category: req.params.category,
     };
 
-    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
+    const collection = client.db(DB_NAME).collection(COL_RESOURCES);
     collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
@@ -43,7 +44,7 @@ const find_categories = (_, res) => {
       return;
     }
 
-    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
+    const collection = client.db(DB_NAME).collection(COL_RESOURCES);
     collection.distinct('category', (error, result) => {
       if (error) {
         console.log(error);
@@ -56,6 +57,29 @@ const find_categories = (_, res) => {
       res.send({
         statusCode: 200,
         result: result,
+      });
+    });
+  });
+};
+
+const find_workspaces = (_, res) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Categories: MongoClient failed',
+      });
+      return;
+    }
+
+    const collection = client.db(DB_NAME).collection(COL_WORKSPACES);
+    collection.find({}, { projection: { _id: 0 } }).toArray((error, docs) => {
+      assert.equal(null, error);
+      client.close();
+      res.send({
+        statusCode: 200,
+        result: docs,
       });
     });
   });
@@ -75,7 +99,7 @@ const insert_one = (req, res) => {
     const { url } = req.body;
     const category = req.body.category.toLowerCase();
 
-    const collection = client.db(DB_NAME).collection(COLLECTION_NAME);
+    const collection = client.db(DB_NAME).collection(COL_RESOURCES);
     collection.insertOne({ url, category }, (error, result) => {
       if (error) {
         console.log('error', error);
@@ -97,5 +121,6 @@ const insert_one = (req, res) => {
 module.exports = {
   find_category,
   find_categories,
+  find_workspaces,
   insert_one,
 };
