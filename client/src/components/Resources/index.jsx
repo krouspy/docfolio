@@ -3,9 +3,7 @@ import MicroLink from '@microlink/react';
 import { NavLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AddForm from '../AddForm';
 
 import { capitalize } from '#utils';
@@ -52,7 +50,6 @@ export default ({ openDrawer, handleOpenDrawer }) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [addOpen, setAddOpen] = useState(false);
   const { category } = useParams();
 
   useEffect(() => {
@@ -75,10 +72,6 @@ export default ({ openDrawer, handleOpenDrawer }) => {
       .catch(error => console.error(error));
   }, [category]);
 
-  const handleAddOpen = () => {
-    setAddOpen(!addOpen);
-  };
-
   return (
     <React.Fragment>
       <TopBar openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer}>
@@ -89,10 +82,8 @@ export default ({ openDrawer, handleOpenDrawer }) => {
             </Typography>
           ))}
         </div>
-        <Button onClick={handleAddOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
-          Add
-        </Button>
-        <AddForm open={addOpen} handleOpen={handleAddOpen} categories={categories} />
+
+        <AddForm categories={categories} />
       </TopBar>
       <main>
         <Wrapper>

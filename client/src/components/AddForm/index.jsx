@@ -20,12 +20,16 @@ const useStyles = makeStyles({
   },
 });
 
-export default ({ open, handleOpen, categories }) => {
+export default ({ categories }) => {
   const classes = useStyles();
-
   const [url, setURL] = useState('');
   const [category, setCategory] = useState('');
   const [newCategory, setNewCategory] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
   const add = () => {
     if (url && category) {
@@ -64,71 +68,76 @@ export default ({ open, handleOpen, categories }) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleOpen}
-      maxWidth="xs"
-      fullWidth
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Add Source</DialogTitle>
-      <DialogContent dividers>
-        <TextField
-          autoFocus
-          fullWidth
-          select={!newCategory}
-          value={category}
-          onChange={handleCategory}
-          label={newCategory ? 'Create Category' : 'Select Category'}
-          variant="outlined"
-          margin="dense"
-          helperText="Click on left icon to Select or Create a category"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={handleNewCategory}
-                  className={classes.categoryButton}
-                >
-                  <AddCircleIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        >
-          {categories.map(option => (
-            <MenuItem key={option} value={option}>
-              {capitalize(option)}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          value={url}
-          onChange={handleURL}
-          label="url"
-          variant="outlined"
-          type="text"
-          margin="dense"
-          fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <LinkIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleOpen} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={add} color="primary">
-          Add
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <React.Fragment>
+      <Button onClick={handleOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
+        Add
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleOpen}
+        maxWidth="xs"
+        fullWidth
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Add Source</DialogTitle>
+        <DialogContent dividers>
+          <TextField
+            autoFocus
+            fullWidth
+            select={!newCategory}
+            value={category}
+            onChange={handleCategory}
+            label={newCategory ? 'Create Category' : 'Select Category'}
+            variant="outlined"
+            margin="dense"
+            helperText="Click on left icon to Select or Create a category"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleNewCategory}
+                    className={classes.categoryButton}
+                  >
+                    <AddCircleIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          >
+            {categories.map(option => (
+              <MenuItem key={option} value={option}>
+                {capitalize(option)}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            value={url}
+            onChange={handleURL}
+            label="url"
+            variant="outlined"
+            type="text"
+            margin="dense"
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LinkIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleOpen} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={add} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 };
