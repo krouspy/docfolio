@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Home from './Home';
+import Resources from './Resources';
 import TopBar from './TopBar';
 import Drawer from './Drawer';
 import Workspaces from './Workspaces';
@@ -37,7 +37,7 @@ export default () => {
             <Redirect to="/resources/ethereum" />
           </Route>
           <Route path="/resources/:category">
-            <Home />
+            <Resources />
           </Route>
           <Route path="/workspaces">
             <Workspaces />
