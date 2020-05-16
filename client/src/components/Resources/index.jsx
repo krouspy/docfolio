@@ -85,17 +85,15 @@ export default ({ openDrawer, handleOpenDrawer }) => {
 
         <AddForm categories={categories} />
       </TopBar>
-      <main>
-        <Wrapper>
-          <Grid container spacing={4}>
-            {data.map((element, id) => (
-              <Grid item key={id} xs={12} sm={6} md={4}>
-                <MicroLink url={element.url} size="large" />
-              </Grid>
-            ))}
-          </Grid>
-        </Wrapper>
-      </main>
+      <Wrapper>
+        <Grid container spacing={4}>
+          {data.map((element, id) => (
+            <Grid item key={id} xs={12} sm={6} md={4}>
+              <MicroLink url={element.url} size="large" />
+            </Grid>
+          ))}
+        </Grid>
+      </Wrapper>
     </React.Fragment>
   );
 };

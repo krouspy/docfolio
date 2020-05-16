@@ -12,5 +12,9 @@ const useStyles = makeStyles(theme => ({
 export default ({ children }) => {
   const classes = useStyles();
 
-  return <Container className={classes.cardGrid}>{children}</Container>;
+  return (
+    <main>
+      <Container className={classes.cardGrid}>{children}</Container>
+    </main>
+  );
 };
