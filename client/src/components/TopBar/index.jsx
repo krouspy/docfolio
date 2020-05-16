@@ -42,7 +42,7 @@ const CustomNavLink = ({ category, children, ...rest }) => {
   return (
     <NavLink
       {...rest}
-      to={`/${category}`}
+      to={`/resources/${category}`}
       style={{ textDecoration: 'none', color: 'inherit' }}
       activeStyle={{ color: 'teal' }}
     >

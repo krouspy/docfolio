@@ -9,8 +9,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import ResourcesIcon from '@material-ui/icons/Apps';
+import WorkspacesIcon from '@material-ui/icons/Build';
 
 const drawerWidth = 200;
 
@@ -56,6 +56,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const ListItemLink = props => {
+  return <ListItem button component="a" {...props} />;
+};
+
 export default ({ open, handleOpen }) => {
   const classes = useStyles();
 
@@ -80,18 +84,18 @@ export default ({ open, handleOpen }) => {
       </div>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItemLink href="/resources/ethereum">
           <ListItemIcon>
-            <InboxIcon className={classes.icon} />
+            <ResourcesIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText className={classes.icon} primary="Resources" />
-        </ListItem>
-        <ListItem button>
+        </ListItemLink>
+        <ListItemLink href="/workspaces">
           <ListItemIcon>
-            <MailIcon className={classes.icon} />
+            <WorkspacesIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText className={classes.icon} primary="Workspaces" />
-        </ListItem>
+        </ListItemLink>
       </List>
       <Divider />
     </Drawer>
