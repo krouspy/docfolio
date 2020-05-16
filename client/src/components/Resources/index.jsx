@@ -82,7 +82,6 @@ export default ({ openDrawer, handleOpenDrawer }) => {
             </Typography>
           ))}
         </div>
-
         <AddForm categories={categories} />
       </TopBar>
       <Wrapper>
