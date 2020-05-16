@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Resources from './Resources';
-import TopBar from './TopBar';
 import Drawer from './Drawer';
+import Resources from './Resources';
 import Workspaces from './Workspaces';
 
 const useStyles = makeStyles({
@@ -17,18 +16,17 @@ const useStyles = makeStyles({
 
 export default () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const handleOpen = () => {
-    setOpen(!open);
+  const handleOpenDrawer = () => {
+    setOpenDrawer(!openDrawer);
   };
 
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <TopBar open={open} handleOpen={handleOpen} />
-        <Drawer open={open} handleOpen={handleOpen} />
+        <Drawer open={openDrawer} handleOpen={handleOpenDrawer} />
         <Switch>
           <Route exact path="/">
             <Redirect to="/resources/ethereum" />
@@ -37,10 +35,10 @@ export default () => {
             <Redirect to="/resources/ethereum" />
           </Route>
           <Route path="/resources/:category">
-            <Resources />
+            <Resources openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
           </Route>
           <Route path="/workspaces">
-            <Workspaces />
+            <Workspaces openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
           </Route>
         </Switch>
       </div>

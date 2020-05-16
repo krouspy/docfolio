@@ -15,9 +15,6 @@ import WorkspacesIcon from '@material-ui/icons/Build';
 const drawerWidth = 200;
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
