@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import TopBar from '../TopBar';
+import Wrapper from '../Wrapper';
 
 export default ({ openDrawer, handleOpenDrawer }) => {
   return (
@@ -16,7 +17,9 @@ export default ({ openDrawer, handleOpenDrawer }) => {
           Add
         </Button>
       </TopBar>
-      <h1 styles={{ marginTop: 300 }}>Workspaces page</h1>
+      <Wrapper>
+        <h1 styles={{ marginTop: 300 }}>Workspaces page</h1>
+      </Wrapper>
     </React.Fragment>
   );
 };

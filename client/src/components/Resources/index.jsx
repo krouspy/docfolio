@@ -3,7 +3,6 @@ import MicroLink from '@microlink/react';
 import { NavLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -11,12 +10,9 @@ import AddForm from '../AddForm';
 
 import { capitalize } from '#utils';
 import TopBar from '../TopBar';
+import Wrapper from '../Wrapper';
 
 const useStyles = makeStyles(theme => ({
-  cardGrid: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
   card: {
     height: '100%',
     display: 'flex',
@@ -98,9 +94,8 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         </Button>
         <AddForm open={addOpen} handleOpen={handleAddOpen} categories={categories} />
       </TopBar>
-
       <main>
-        <Container className={classes.cardGrid}>
+        <Wrapper>
           <Grid container spacing={4}>
             {data.map((element, id) => (
               <Grid item key={id} xs={12} sm={6} md={4}>
@@ -108,7 +103,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
               </Grid>
             ))}
           </Grid>
-        </Container>
+        </Wrapper>
       </main>
     </React.Fragment>
   );
