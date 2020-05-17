@@ -3,10 +3,10 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
 import TopBar from '../TopBar';
-import CreateProject from './CreateProject';
+import CreateWorkspace from './CreateWorkspace';
 import Wrapper from '../Wrapper';
 import Cards from './Cards';
-import Project from './Project';
+import Workspace from './Workspace';
 
 export default ({ openDrawer, handleOpenDrawer }) => {
   const [workspaces, setWorkspaces] = useState([]);
@@ -26,7 +26,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         <Typography variant="h6" noWrap>
           Workspaces
         </Typography>
-        <CreateProject />
+        <CreateWorkspace totalWorkspaces={workspaces.length} />
       </TopBar>
       <Wrapper>
         <Switch>
@@ -34,7 +34,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
             <Cards workspaces={workspaces} />
           </Route>
           <Route path={`${path}/:workspaceId`}>
-            <Project totalWorkspaces={workspaces.length} />
+            <Workspace />
           </Route>
         </Switch>
       </Wrapper>
