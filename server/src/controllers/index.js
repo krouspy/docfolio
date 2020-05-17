@@ -19,6 +19,13 @@ const find_workspaces = (_, res) => {
   find_documents(COL_WORKSPACES, res, query);
 };
 
+const find_workspace = (req, res) => {
+  const query = {
+    id: parseInt(req.params.workspaceId),
+  };
+  find_documents(COL_WORKSPACES, res, query);
+};
+
 const add_resource = (req, res) => {
   const { url } = req.body;
   const category = req.body.category.toLowerCase();
@@ -36,6 +43,7 @@ module.exports = {
   find_category,
   find_categories,
   find_workspaces,
+  find_workspace,
   add_resource,
   create_project,
 };
