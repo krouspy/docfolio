@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import TopBar from '../TopBar';
+import CreateProject from './CreateProject';
 import Wrapper from '../Wrapper';
 import Cards from './Cards';
 import Project from './Project';
@@ -27,9 +26,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         <Typography variant="h6" noWrap>
           Workspaces
         </Typography>
-        <Button size="large" color="inherit" startIcon={<AddCircleIcon />}>
-          Add
-        </Button>
+        <CreateProject />
       </TopBar>
       <Wrapper>
         <Switch>
