@@ -33,7 +33,7 @@ export default ({ categories }) => {
 
   const add = () => {
     if (url && category) {
-      const postURL = 'http://localhost:3000/api/add';
+      const postURL = 'http://localhost:3000/api/addResource';
       const options = {
         method: 'POST',
         headers: {
