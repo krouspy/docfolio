@@ -10,7 +10,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 export default ({ totalWorkspaces }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -34,7 +34,10 @@ export default ({ totalWorkspaces }) => {
 
       fetch(postURL, options)
         .then(response => response.json())
-        .then(response => console.log(response))
+        .then(response => {
+          console.log(response);
+          setOpen(false);
+        })
         .catch(error => console.log(error));
     } else {
       alert('Add: issue in form');
@@ -54,13 +57,7 @@ export default ({ totalWorkspaces }) => {
       <Button onClick={handleOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
         Add
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleOpen}
-        maxWidth="xs"
-        fullWidth
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={open} onClose={handleOpen} maxWidth="xs" fullWidth>
         <DialogTitle id="form-dialog-title">Create Project</DialogTitle>
         <DialogContent dividers>
           <TextField
