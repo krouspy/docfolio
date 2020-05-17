@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ title, description }) => {
+export default ({ id, title, description }) => {
   const classes = useStyles();
 
   return (

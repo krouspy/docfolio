@@ -5,7 +5,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import TopBar from '../TopBar';
 import Wrapper from '../Wrapper';
-import Project from './Project';
+import CardProject from './CardProject';
 
 export default ({ openDrawer, handleOpenDrawer }) => {
   const [workspaces, setWorkspaces] = useState([]);
@@ -29,9 +29,10 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         </Button>
       </TopBar>
       <Wrapper>
-        {workspaces.map((workspace, index) => (
-          <Project key={index} title={workspace.title} description={workspace.description} />
-        ))}
+        {workspaces.map(workspace => {
+          const { id, title, description } = workspace;
+          return <CardProject key={id} id={id} title={title} description={description} />;
+        })}
       </Wrapper>
     </React.Fragment>
   );
