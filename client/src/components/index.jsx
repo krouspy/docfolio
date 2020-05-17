@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from './Drawer';
 import Resources from './Resources';
 import Workspaces from './Workspaces';
+import Project from './Workspaces/Project';
 
 const useStyles = makeStyles({
   root: {
@@ -37,8 +38,11 @@ export default () => {
           <Route path="/resources/:category">
             <Resources openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
           </Route>
-          <Route path="/workspaces">
+          <Route exact path="/workspaces">
             <Workspaces openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
+          </Route>
+          <Route exact path="/workspace/:id">
+            <Project />
           </Route>
         </Switch>
       </div>
