@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import MicroLink from '@microlink/react';
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import AddForm from '../AddForm';
 
-import { capitalize } from '#utils';
 import TopBar from '../TopBar';
 import Wrapper from '../Wrapper';
+import CustomNavLink from '#customNavLink';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -32,19 +32,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0, 1),
   },
 }));
-
-const CustomNavLink = ({ category, children, ...rest }) => {
-  return (
-    <NavLink
-      to={`/resources/${category}`}
-      style={{ textDecoration: 'none', color: 'inherit' }}
-      activeStyle={{ color: 'teal' }}
-      {...rest}
-    >
-      {children}
-    </NavLink>
-  );
-};
 
 export default ({ openDrawer, handleOpenDrawer }) => {
   const classes = useStyles();
@@ -78,7 +65,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         <div className={classes.categories}>
           {categories.map((category, index) => (
             <Typography key={index} className={classes.title} variant="h6" noWrap>
-              <CustomNavLink category={category}>{capitalize(category)}</CustomNavLink>
+              <CustomNavLink route={`/resources/${category}`}>{category}</CustomNavLink>
             </Typography>
           ))}
         </div>
