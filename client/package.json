@@ -20,7 +20,8 @@
     "prettier": "^2.0.5"
   },
   "alias": {
-    "#utils": "./src/utils"
+    "#utils": "./src/utils",
+    "#customNavLink": "./src/components/CustomNavLink"
   },
   "browserslist": {
     "production": [
