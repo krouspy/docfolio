@@ -1,27 +1,13 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import { capitalize } from '#utils';
-
-const useStyles = makeStyles({
-  categoryButton: {
-    marginRight: -12,
-  },
-});
-
-export default () => {
-  const classes = useStyles();
+export default ({ totalWorkspaces }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [open, setOpen] = useState(true);
@@ -30,9 +16,9 @@ export default () => {
     setOpen(!open);
   };
 
-  const add = () => {
-    if (url && category) {
-      const postURL = 'http://localhost:3000/api/add';
+  const createProject = () => {
+    if (title && description) {
+      const postURL = 'http://localhost:3000/api/createProject';
       const options = {
         method: 'POST',
         headers: {
@@ -40,10 +26,16 @@ export default () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          url,
-          category,
+          id: totalWorkspaces,
+          title,
+          description,
         }),
       };
+
+      fetch(postURL, options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
     } else {
       alert('Add: issue in form');
     }
@@ -94,8 +86,8 @@ export default () => {
           <Button onClick={handleOpen} color="primary">
             Cancel
           </Button>
-          <Button onClick={add} color="primary">
-            Add
+          <Button onClick={createProject} color="primary">
+            Create
           </Button>
         </DialogActions>
       </Dialog>

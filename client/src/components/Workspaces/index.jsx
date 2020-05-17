@@ -34,7 +34,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
             <Cards workspaces={workspaces} />
           </Route>
           <Route path={`${path}/:workspaceId`}>
-            <Project />
+            <Project totalWorkspaces={workspaces.length} />
           </Route>
         </Switch>
       </Wrapper>
