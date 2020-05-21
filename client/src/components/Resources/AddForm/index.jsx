@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,23 +12,17 @@ import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import { capitalize } from '#utils';
-
-const useStyles = makeStyles({
-  categoryButton: {
-    marginRight: -12,
-  },
-});
+import Snackbar from '#snackbar';
 
 export default ({ categories }) => {
-  const classes = useStyles();
   const [url, setURL] = useState('');
   const [category, setCategory] = useState('');
   const [newCategory, setNewCategory] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    error: false,
+  });
 
   const add = () => {
     if (url && category) {
@@ -48,11 +41,28 @@ export default ({ categories }) => {
 
       fetch(postURL, options)
         .then(response => response.json())
-        .then(response => console.log(response))
+        .then(response => {
+          setOpen(false);
+          setSnackbar({
+            open: true,
+            error: response.statusCode !== 200,
+          });
+        })
         .catch(error => console.error(error));
     } else {
       alert('Add: issue in form');
     }
+  };
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
+  const handleSnackbar = () => {
+    setSnackbar(prevState => ({
+      ...prevState,
+      open: !prevState.open,
+    }));
   };
 
   const handleURL = event => {
@@ -72,6 +82,7 @@ export default ({ categories }) => {
       <Button onClick={handleOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
         Add
       </Button>
+      {/* Dialog */}
       <Dialog
         open={open}
         onClose={handleOpen}
@@ -79,10 +90,9 @@ export default ({ categories }) => {
         fullWidth
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Add Source</DialogTitle>
+        <DialogTitle>Add Source</DialogTitle>
         <DialogContent dividers>
           <TextField
-            autoFocus
             fullWidth
             select={!newCategory}
             value={category}
@@ -98,7 +108,7 @@ export default ({ categories }) => {
                     edge="start"
                     color="inherit"
                     onClick={handleNewCategory}
-                    className={classes.categoryButton}
+                    style={{ marginRight: -12 }}
                   >
                     <AddCircleIcon />
                   </IconButton>
@@ -138,6 +148,8 @@ export default ({ categories }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Snackbar */}
+      <Snackbar open={snackbar.open} handleOpen={handleSnackbar} error={snackbar.error} />
     </React.Fragment>
   );
 };
