@@ -9,6 +9,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.14",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.53",
     "@microlink/react": "^5.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -21,7 +22,8 @@
   },
   "alias": {
     "#utils": "./src/utils",
-    "#customNavLink": "./src/components/CustomNavLink"
+    "#customNavLink": "./src/components/CustomNavLink",
+    "#snackbar": "./src/components/Snackbar"
   },
   "browserslist": {
     "production": [
