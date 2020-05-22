@@ -6,6 +6,7 @@ router.get('/category/:category', controller.find_category);
 router.get('/workspaces', controller.find_workspaces);
 router.get('/workspace/:workspaceId', controller.find_workspace);
 router.post('/addResource', controller.add_resource);
-router.post('/createProject', controller.create_project);
+router.post('/createWorkspace', controller.create_workspace);
+router.post('/updateWorkspace', controller.update_workspace);
 
 module.exports = router;

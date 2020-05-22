@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 const MONGO_URI = process.env.MONGO_URI;
 const DB_NAME = process.env.DB_NAME;
 
-const find_documents = (collection_name, res, query) => {
+const find_documents = (collectionName, res, query) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -14,7 +14,7 @@ const find_documents = (collection_name, res, query) => {
       });
       return;
     }
-    const collection = client.db(DB_NAME).collection(collection_name);
+    const collection = client.db(DB_NAME).collection(collectionName);
     collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
@@ -26,7 +26,7 @@ const find_documents = (collection_name, res, query) => {
   });
 };
 
-const find_distinct_documents = (collection_name, res) => {
+const find_distinct_documents = (collectionName, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -36,7 +36,7 @@ const find_distinct_documents = (collection_name, res) => {
       });
       return;
     }
-    const collection = client.db(DB_NAME).collection(collection_name);
+    const collection = client.db(DB_NAME).collection(collectionName);
     collection.distinct('category', (error, result) => {
       if (error) {
         console.log(error);
@@ -54,7 +54,7 @@ const find_distinct_documents = (collection_name, res) => {
   });
 };
 
-const insert_one = (col_name, query, res) => {
+const insert_document = (collectionName, query, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -64,8 +64,9 @@ const insert_one = (col_name, query, res) => {
       });
       return;
     }
-    const collection = client.db(DB_NAME).collection(col_name);
-    collection.insertOne(query, (error, result) => {
+
+    const collection = client.db(DB_NAME).collection(collectionName);
+    collection.insertOne(query, (error, response) => {
       if (error) {
         console.log('error', error);
         res.send({
@@ -74,10 +75,41 @@ const insert_one = (col_name, query, res) => {
         });
         return;
       }
+      const result = response.ops[0];
+      delete result._id;
 
       res.send({
         statusCode: 200,
-        result: 'insertOne route',
+        result,
+      });
+    });
+  });
+};
+
+const update_document = (collectionName, filter, query, res) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Insert: MongoClient failed',
+      });
+      return;
+    }
+
+    const collection = client.db(DB_NAME).collection(collectionName);
+    collection.updateOne(filter, query, (error, result) => {
+      if (error) {
+        console.log('error', error);
+        res.send({
+          statusCode: 500,
+          result: 'Error Update: update route',
+        });
+        return;
+      }
+      res.send({
+        statusCode: 200,
+        result: 'Update successful',
       });
     });
   });
@@ -86,5 +118,6 @@ const insert_one = (col_name, query, res) => {
 module.exports = {
   find_documents,
   find_distinct_documents,
-  insert_one,
+  insert_document,
+  update_document,
 };

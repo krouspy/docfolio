@@ -1,4 +1,4 @@
-const { find_documents, find_distinct_documents, insert_one } = require('./queries');
+const { find_documents, find_distinct_documents, insert_document, update_document } = require('./queries');
 
 const COL_RESOURCES = process.env.COL_RESOURCES;
 const COL_WORKSPACES = process.env.COL_WORKSPACES;
@@ -30,13 +30,25 @@ const add_resource = (req, res) => {
   const { url } = req.body;
   const category = req.body.category.toLowerCase();
   const query = { url, category };
-  insert_one(COL_RESOURCES, query, res);
+  insert_document(COL_RESOURCES, query, res);
 };
 
-const create_project = (req, res) => {
+const create_workspace = (req, res) => {
   const { id, title, description } = req.body;
   const query = { id, title, description };
-  insert_one(COL_WORKSPACES, query, res);
+  insert_document(COL_WORKSPACES, query, res);
+};
+
+const update_workspace = (req, res) => {
+  const { id, title, description } = req.body;
+  const filter = { id };
+  const query = {
+    $set: {
+      title,
+      description,
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
 };
 
 module.exports = {
@@ -45,5 +57,6 @@ module.exports = {
   find_workspaces,
   find_workspace,
   add_resource,
-  create_project,
+  create_workspace,
+  update_workspace,
 };
