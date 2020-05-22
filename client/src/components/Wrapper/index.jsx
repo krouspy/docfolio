@@ -9,12 +9,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ children }) => {
+export default ({ children, size }) => {
   const classes = useStyles();
 
   return (
     <main>
-      <Container maxWidth="md" className={classes.root}>
+      <Container maxWidth={size} className={classes.root}>
         {children}
       </Container>
     </main>

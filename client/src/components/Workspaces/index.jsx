@@ -28,7 +28,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         </Typography>
         <CreateWorkspace totalWorkspaces={workspaces.length} />
       </TopBar>
-      <Wrapper>
+      <Wrapper size="md">
         <Switch>
           <Route exact path={path}>
             <Cards workspaces={workspaces} />

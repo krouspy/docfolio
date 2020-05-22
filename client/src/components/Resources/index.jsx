@@ -71,7 +71,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
         </div>
         <AddForm categories={categories} />
       </TopBar>
-      <Wrapper>
+      <Wrapper size="lg">
         <Grid container spacing={4}>
           {data.map((element, id) => (
             <Grid item key={id} xs={12} sm={6} md={4}>
