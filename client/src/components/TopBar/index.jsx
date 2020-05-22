@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ children, openDrawer, handleOpenDrawer }) => {
+const TopBar = ({ children, openDrawer, toggleDrawer }) => {
   const classes = useStyles();
 
   return (
@@ -31,7 +32,7 @@ export default ({ children, openDrawer, handleOpenDrawer }) => {
       })}
     >
       <Toolbar variant="regular" className={classes.toolbar}>
-        <IconButton edge="start" color="inherit" onClick={handleOpenDrawer}>
+        <IconButton edge="start" color="inherit" onClick={toggleDrawer}>
           <MenuIcon />
         </IconButton>
         {children}
@@ -39,3 +40,11 @@ export default ({ children, openDrawer, handleOpenDrawer }) => {
     </AppBar>
   );
 };
+
+TopBar.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]),
+  openDrawer: PropTypes.bool.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+};
+
+export default TopBar;

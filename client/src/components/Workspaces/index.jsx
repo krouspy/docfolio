@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
@@ -8,7 +9,7 @@ import Wrapper from '../Wrapper';
 import Cards from './Cards';
 import Workspace from './Workspace';
 
-export default ({ openDrawer, handleOpenDrawer }) => {
+const Workspaces = ({ openDrawer, toggleDrawer }) => {
   const [workspaces, setWorkspaces] = useState([]);
   const { path } = useRouteMatch();
 
@@ -22,7 +23,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
 
   return (
     <React.Fragment>
-      <TopBar openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer}>
+      <TopBar openDrawer={openDrawer} toggleDrawer={toggleDrawer}>
         <Typography variant="h6" noWrap>
           Workspaces
         </Typography>
@@ -41,3 +42,10 @@ export default ({ openDrawer, handleOpenDrawer }) => {
     </React.Fragment>
   );
 };
+
+Workspaces.propTypes = {
+  openDrawer: PropTypes.bool.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+};
+
+export default Workspaces;

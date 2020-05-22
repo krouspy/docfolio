@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -9,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ children, size }) => {
+const Wrapper = ({ children, size }) => {
   const classes = useStyles();
 
   return (
@@ -20,3 +21,14 @@ export default ({ children, size }) => {
     </main>
   );
 };
+
+Wrapper.defaultProps = {
+  size: 'lg',
+};
+
+Wrapper.propTypes = {
+  children: PropTypes.element.isRequired,
+  size: PropTypes.string,
+};
+
+export default Wrapper;

@@ -70,6 +70,7 @@ Editable.propTypes = {
   text: PropTypes.string.isRequired,
   updateText: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  variant: PropTypes.string.isRequired,
 };
 
 export default Editable;

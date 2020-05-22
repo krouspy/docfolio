@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 import { capitalize } from '#utils';
 
-export default ({ route, children, ...rest }) => {
+const CustomNavLink = ({ route, children, ...rest }) => {
   return (
     <NavLink
       to={route}
@@ -15,3 +16,10 @@ export default ({ route, children, ...rest }) => {
     </NavLink>
   );
 };
+
+CustomNavLink.propTypes = {
+  route: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
+};
+
+export default CustomNavLink;

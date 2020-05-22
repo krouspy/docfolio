@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import MicroLink from '@microlink/react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -33,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ openDrawer, handleOpenDrawer }) => {
+const Resources = ({ openDrawer, toggleDrawer }) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -61,7 +62,7 @@ export default ({ openDrawer, handleOpenDrawer }) => {
 
   return (
     <React.Fragment>
-      <TopBar openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer}>
+      <TopBar openDrawer={openDrawer} toggleDrawer={toggleDrawer}>
         <div className={classes.categories}>
           {categories.map((category, index) => (
             <Typography key={index} className={classes.title} variant="h6" noWrap>
@@ -83,3 +84,10 @@ export default ({ openDrawer, handleOpenDrawer }) => {
     </React.Fragment>
   );
 };
+
+Resources.propTypes = {
+  openDrawer: PropTypes.bool.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
+};
+
+export default Resources;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
@@ -44,6 +45,12 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
       Save Changes
     </Button>
   );
+};
+
+SaveButton.propTypes = {
+  data: PropTypes.object.isRequired,
+  updateSave: PropTypes.func.isRequired,
+  setSnackbar: PropTypes.func.isRequired,
 };
 
 export default SaveButton;

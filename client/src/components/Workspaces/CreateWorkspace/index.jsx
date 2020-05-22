@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -7,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-export default ({ totalWorkspaces }) => {
+const CreateWorkspace = ({ totalWorkspaces }) => {
   const [data, setData] = useState({
     title: '',
     description: '',
@@ -98,3 +99,9 @@ export default ({ totalWorkspaces }) => {
     </React.Fragment>
   );
 };
+
+CreateWorkspace.propTypes = {
+  totalWorkspaces: PropTypes.number.isRequired,
+};
+
+export default CreateWorkspace;

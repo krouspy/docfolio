@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -57,7 +58,7 @@ const ListItemLink = props => {
   return <ListItem button component="a" {...props} />;
 };
 
-export default ({ open, handleOpen }) => {
+const Sidebar = ({ open, toggle }) => {
   const classes = useStyles();
 
   return (
@@ -75,7 +76,7 @@ export default ({ open, handleOpen }) => {
       }}
     >
       <div className={classes.toolbar}>
-        <IconButton className={classes.icon} onClick={handleOpen}>
+        <IconButton className={classes.icon} onClick={toggle}>
           <ChevronLeftIcon />
         </IconButton>
       </div>
@@ -98,3 +99,10 @@ export default ({ open, handleOpen }) => {
     </Drawer>
   );
 };
+
+Sidebar.propTypes = {
+  open: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
+
+export default Sidebar;

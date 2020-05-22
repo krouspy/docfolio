@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default ({ id, title, description }) => {
+const CardWorkspace = ({ id, title, description }) => {
   const classes = useStyles();
 
   return (
@@ -42,3 +43,11 @@ export default ({ id, title, description }) => {
     </Card>
   );
 };
+
+CardWorkspace.propTypes = {
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
+export default CardWorkspace;

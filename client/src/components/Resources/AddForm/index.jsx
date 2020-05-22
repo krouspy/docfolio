@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,7 +15,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { capitalize } from '#utils';
 import Snackbar from '#snackbar';
 
-export default ({ categories }) => {
+const AddForm = ({ categories }) => {
   const [url, setURL] = useState('');
   const [category, setCategory] = useState('');
   const [newCategory, setNewCategory] = useState(false);
@@ -153,3 +154,9 @@ export default ({ categories }) => {
     </React.Fragment>
   );
 };
+
+AddForm.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.string),
+};
+
+export default AddForm;

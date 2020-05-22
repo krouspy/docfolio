@@ -16,17 +16,17 @@ const useStyles = makeStyles({
 
 export default () => {
   const classes = useStyles();
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const handleOpenDrawer = () => {
-    setOpenDrawer(!openDrawer);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   return (
     <Router>
       <div className={classes.root}>
         <CssBaseline />
-        <Drawer open={openDrawer} handleOpen={handleOpenDrawer} />
+        <Drawer open={open} toggle={toggleDrawer} />
         <Switch>
           <Route exact path="/">
             <Redirect to="/resources/ethereum" />
@@ -35,10 +35,10 @@ export default () => {
             <Redirect to="/resources/ethereum" />
           </Route>
           <Route path="/resources/:category">
-            <Resources openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
+            <Resources openDrawer={open} toggleDrawer={toggleDrawer} />
           </Route>
           <Route path="/workspaces">
-            <Workspaces openDrawer={openDrawer} handleOpenDrawer={handleOpenDrawer} />
+            <Workspaces openDrawer={open} toggleDrawer={toggleDrawer} />
           </Route>
         </Switch>
       </div>

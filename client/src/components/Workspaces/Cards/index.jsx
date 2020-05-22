@@ -1,13 +1,20 @@
 import React from 'react';
-import CardProject from '../CardProject';
+import PropTypes from 'prop-types';
+import CardWorkspace from '../CardWorkspace';
 
-export default ({ workspaces }) => {
+const Cards = ({ workspaces }) => {
   return (
     <React.Fragment>
       {workspaces.map(workspace => {
         const { id, title, description } = workspace;
-        return <CardProject key={id} id={id} title={title} description={description} />;
+        return <CardWorkspace key={id} id={id} title={title} description={description} />;
       })}
     </React.Fragment>
   );
 };
+
+Cards.propTypes = {
+  workspaces: PropTypes.arrayOf(PropTypes.object),
+};
+
+export default Cards;
