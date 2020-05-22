@@ -58,7 +58,7 @@ export default ({ categories }) => {
     setOpen(!open);
   };
 
-  const handleSnackbar = () => {
+  const toggleSnackbar = () => {
     setSnackbar(prevState => ({
       ...prevState,
       open: !prevState.open,
@@ -149,7 +149,7 @@ export default ({ categories }) => {
         </DialogActions>
       </Dialog>
       {/* Snackbar */}
-      <Snackbar open={snackbar.open} handleOpen={handleSnackbar} error={snackbar.error} />
+      <Snackbar open={snackbar.open} toggle={toggleSnackbar} error={snackbar.error} />
     </React.Fragment>
   );
 };

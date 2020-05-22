@@ -4,14 +4,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import Editable from './Editable';
+import SaveButton from './SaveButton';
+import Snackbar from '#snackbar';
+
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
       color: 'white',
-      padding: theme.spacing(3),
-      margin: theme.spacing(1),
+      margin: theme.spacing(2, 0),
+      padding: theme.spacing(2),
       backgroundColor: '#272c34',
     },
+  },
+  head: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
   },
   link: {
     color: 'white',
@@ -21,7 +30,16 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const { workspaceId } = useParams();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    error: false,
+  });
   const [workspace, setWorkspace] = useState({
+    title: '',
+    description: '',
+  });
+  // save initial workspace state to compare if there's any changes to display save button or not
+  const [save, setSave] = useState({
     title: '',
     description: '',
   });
@@ -32,21 +50,51 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const result = response.result[0];
-        console.log(result);
         setWorkspace(result);
+        setSave(result);
       })
       .catch(error => console.log(error));
   }, []);
 
+  const updateWorkspace = event => {
+    const { name, value } = event.target;
+    setWorkspace(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const updateSave = () => {
+    setSave(workspace);
+  };
+
+  const checkChanges = () => {
+    return workspace.title !== save.title || workspace.description !== save.description;
+  };
+
+  const toggleSnackbar = () => {
+    setSnackbar(prevState => ({
+      ...prevState,
+      open: !prevState.open,
+    }));
+  };
+
   const { title, description } = workspace;
+  const update = checkChanges();
 
   return (
     <div className={classes.root}>
-      <Paper>
-        <Typography variant="h5" gutterBottom>
-          {title}
-        </Typography>
-        <Typography variant="subtitle1">{description}</Typography>
+      <Paper className={classes.head}>
+        <Editable variant="h5" text={title} updateText={updateWorkspace} name="title" />
+        <Editable
+          variant="subtitle1"
+          text={description}
+          updateText={updateWorkspace}
+          name="description"
+        />
+        {update && (
+          <SaveButton data={workspace} updateSave={updateSave} setSnackbar={setSnackbar} />
+        )}
       </Paper>
       <Paper>
         <Typography variant="h5" gutterBottom>
@@ -68,6 +116,7 @@ export default () => {
           </a>
         </Typography>
       </Paper>
+      <Snackbar open={snackbar.open} toggle={toggleSnackbar} error={snackbar.error} />
     </div>
   );
 };

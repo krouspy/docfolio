@@ -6,15 +6,15 @@ const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-export default ({ open, handleOpen, error }) => {
+export default ({ open, toggle, error }) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={open}
-      onClose={handleOpen}
+      onClose={toggle}
       autoHideDuration={3000}
     >
-      <Alert onClose={handleOpen} severity={error ? 'error' : 'success'}>
+      <Alert onClose={toggle} severity={error ? 'error' : 'success'}>
         {error ? 'Add Resource Failed :(' : 'Resource added successfully!'}
       </Alert>
     </Snackbar>

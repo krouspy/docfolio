@@ -8,8 +8,10 @@ import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 export default ({ totalWorkspaces }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [data, setData] = useState({
+    title: '',
+    description: '',
+  });
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -17,6 +19,7 @@ export default ({ totalWorkspaces }) => {
   };
 
   const createProject = () => {
+    const { title, description } = data;
     if (title && description) {
       const postURL = 'http://localhost:3000/api/createProject';
       const options = {
@@ -44,13 +47,15 @@ export default ({ totalWorkspaces }) => {
     }
   };
 
-  const handleTitle = event => {
-    setTitle(event.target.value);
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleDescription = event => {
-    setDescription(event.target.value);
-  };
+  const { title, description } = data;
 
   return (
     <React.Fragment>
@@ -58,11 +63,12 @@ export default ({ totalWorkspaces }) => {
         Add
       </Button>
       <Dialog open={open} onClose={handleOpen} maxWidth="xs" fullWidth>
-        <DialogTitle id="form-dialog-title">Create Project</DialogTitle>
+        <DialogTitle>Create Project</DialogTitle>
         <DialogContent dividers>
           <TextField
             value={title}
-            onChange={handleTitle}
+            onChange={handleChange}
+            name="title"
             label="Title"
             variant="outlined"
             type="text"
@@ -71,7 +77,8 @@ export default ({ totalWorkspaces }) => {
           />
           <TextField
             value={description}
-            onChange={handleDescription}
+            onChange={handleChange}
+            name="description"
             label="Description"
             variant="outlined"
             type="text"
