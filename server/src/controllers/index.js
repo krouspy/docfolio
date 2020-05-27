@@ -39,6 +39,17 @@ const create_workspace = (req, res) => {
   insert_document(COL_WORKSPACES, query, res);
 };
 
+const create_section = (req, res) => {
+  const { id, section } = req.body;
+  const filter = { id: parseInt(id) };
+  const query = {
+    $push: {
+      sections: section,
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
+};
+
 const update_workspace = (req, res) => {
   const { id, title, description } = req.body;
   const filter = { id };
@@ -58,5 +69,6 @@ module.exports = {
   find_workspace,
   add_resource,
   create_workspace,
+  create_section,
   update_workspace,
 };

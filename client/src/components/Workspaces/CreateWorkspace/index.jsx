@@ -7,22 +7,44 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Snackbar from '#snackbar';
 
 const CreateWorkspace = ({ totalWorkspaces }) => {
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState({
     title: '',
     description: '',
   });
-  const [open, setOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    error: false,
+    messageSuccess: '',
+    messageError: '',
+  });
 
-  const handleOpen = () => {
+  const toggleOpen = () => {
     setOpen(!open);
   };
 
-  const createProject = () => {
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const toggleSnackbar = () => {
+    setSnackbar(prevState => ({
+      ...prevState,
+      open: !prevState.open,
+    }));
+  };
+
+  const createWorkspace = () => {
     const { title, description } = data;
     if (title && description) {
-      const postURL = 'http://localhost:3000/api/createProject';
+      const postURL = 'http://localhost:3000/api/createWorkspace';
       const options = {
         method: 'POST',
         headers: {
@@ -40,7 +62,14 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
         .then(response => response.json())
         .then(response => {
           console.log(response);
+          const { statusCode } = response;
           setOpen(false);
+          setSnackbar({
+            open: true,
+            error: statusCode !== 200,
+            messageSuccess: 'Workspace created',
+            messageError: 'Workspace not created',
+          });
         })
         .catch(error => console.log(error));
     } else {
@@ -48,23 +77,15 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
     }
   };
 
-  const handleChange = event => {
-    const { name, value } = event.target;
-    setData(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
   const { title, description } = data;
 
   return (
     <React.Fragment>
-      <Button onClick={handleOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
+      <Button onClick={toggleOpen} size="large" color="inherit" startIcon={<AddCircleIcon />}>
         Add
       </Button>
-      <Dialog open={open} onClose={handleOpen} maxWidth="xs" fullWidth>
-        <DialogTitle>Create Project</DialogTitle>
+      <Dialog open={open} onClose={toggleOpen} maxWidth="xs" fullWidth>
+        <DialogTitle>Create Workspace</DialogTitle>
         <DialogContent dividers>
           <TextField
             value={title}
@@ -88,14 +109,21 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleOpen} color="primary">
+          <Button onClick={toggleOpen} color="primary">
             Cancel
           </Button>
-          <Button onClick={createProject} color="primary">
+          <Button onClick={createWorkspace} color="primary">
             Create
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        toggle={toggleSnackbar}
+        messageSuccess={snackbar.messageSuccess}
+        messageError={snackbar.messageError}
+        error={snackbar.error}
+      />
     </React.Fragment>
   );
 };

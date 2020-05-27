@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 
+import Section from './Section';
+import CreateSection from './CreateSection';
 import Editable from './Editable';
 import SaveButton from './SaveButton';
 import Snackbar from '#snackbar';
@@ -22,26 +23,26 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  link: {
-    color: 'white',
-  },
 }));
 
 export default () => {
   const classes = useStyles();
   const { workspaceId } = useParams();
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-  });
-  const [workspace, setWorkspace] = useState({
+  const [sections, setSections] = useState([]);
+  const [headers, setHeaders] = useState({
     title: '',
     description: '',
   });
-  // save initial workspace state to compare if there's any changes to display save button or not
+  // save initial workspace state to compare if there's any changes to toggle save button
   const [save, setSave] = useState({
     title: '',
     description: '',
+  });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    error: false,
+    messageSuccess: '',
+    messageError: '',
   });
 
   useEffect(() => {
@@ -50,27 +51,13 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const result = response.result[0];
-        setWorkspace(result);
+        setSections(result.sections);
+        delete result.sections;
+        setHeaders(result);
         setSave(result);
       })
       .catch(error => console.log(error));
   }, []);
-
-  const updateWorkspace = event => {
-    const { name, value } = event.target;
-    setWorkspace(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const updateSave = () => {
-    setSave(workspace);
-  };
-
-  const checkChanges = () => {
-    return workspace.title !== save.title || workspace.description !== save.description;
-  };
 
   const toggleSnackbar = () => {
     setSnackbar(prevState => ({
@@ -79,44 +66,70 @@ export default () => {
     }));
   };
 
-  const { title, description } = workspace;
-  const update = checkChanges();
+  const updateHeaders = event => {
+    const { name, value } = event.target;
+    setHeaders(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const updateSection = (event, index) => {
+    const { name, value } = event.target;
+    setSections(prevState => {
+      return prevState.map((element, pos) =>
+        index === pos ? { ...element, [name]: value } : element
+      );
+    });
+  };
+
+  const updateSave = () => {
+    setSave(headers);
+  };
+
+  const checkHeadersChanges = () => {
+    return headers.title !== save.title || headers.description !== save.description;
+  };
+
+  const { title, description } = headers;
+  const update = checkHeadersChanges();
 
   return (
     <div className={classes.root}>
       <Paper className={classes.head}>
-        <Editable variant="h5" text={title} updateText={updateWorkspace} name="title" />
+        <Editable variant="h5" text={title} updateText={updateHeaders} name="title" />
         <Editable
           variant="subtitle1"
           text={description}
-          updateText={updateWorkspace}
+          updateText={updateHeaders}
           name="description"
         />
-        {update && (
-          <SaveButton data={workspace} updateSave={updateSave} setSnackbar={setSnackbar} />
-        )}
+        {update && <SaveButton data={headers} updateSave={updateSave} setSnackbar={setSnackbar} />}
       </Paper>
-      <Paper>
-        <Typography variant="h5" gutterBottom>
-          Michelson
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          Base smart contract language on Tezos
-        </Typography>
-        <Typography variant="body1">
-          <a
-            className={classes.link}
-            href="https://gitlab.com/camlcase-dev/michelson-tutorial/tree/master"
-          >
-            https://gitlab.com/camlcase-dev/michelson-tutorial/tree/master
-            <br />
-            https://medium.com/tezoscommons/examples-of-netezos-usage-b6c24be3ce8a
-            <br />
-            https://medium.com/tezoscommons/netezos-forge-an-operation-locally-and-sign-it-using-ledger-e972b1ca0c7f
-          </a>
-        </Typography>
-      </Paper>
-      <Snackbar open={snackbar.open} toggle={toggleSnackbar} error={snackbar.error} />
+      {(sections || []).map((section, index) => {
+        const { title, content } = section;
+        return (
+          <Section
+            key={index}
+            title={title}
+            content={content}
+            updateSection={e => updateSection(e, index)}
+          />
+        );
+      })}
+      <CreateSection
+        workspaceId={workspaceId}
+        sections={sections}
+        setSections={setSections}
+        setSnackbar={setSnackbar}
+      />
+      <Snackbar
+        open={snackbar.open}
+        toggle={toggleSnackbar}
+        messageSuccess={snackbar.messageSuccess}
+        messageError={snackbar.messageError}
+        error={snackbar.error}
+      />
     </div>
   );
 };

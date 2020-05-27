@@ -25,6 +25,7 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
       },
       body: JSON.stringify(data),
     };
+
     fetch(url, options)
       .then(response => response.json())
       .then(response => {
@@ -35,6 +36,8 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
         setSnackbar({
           open: true,
           error: statusCode !== 200,
+          messageSuccess: 'Changes saved',
+          messageError: 'Changes not saved',
         });
       })
       .catch(error => console.log(error));

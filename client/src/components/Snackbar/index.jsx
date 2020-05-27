@@ -7,7 +7,7 @@ const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-const SnackBar = ({ open, toggle, error }) => {
+const SnackBar = ({ open, toggle, messageSuccess, messageError, error }) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -16,7 +16,7 @@ const SnackBar = ({ open, toggle, error }) => {
       autoHideDuration={3000}
     >
       <Alert onClose={toggle} severity={error ? 'error' : 'success'}>
-        {error ? 'Add Resource Failed :(' : 'Resource added successfully!'}
+        {error ? `Error: ${messageError}` : `Success: ${messageSuccess}`}
       </Alert>
     </Snackbar>
   );
@@ -29,6 +29,8 @@ SnackBar.defaultProps = {
 SnackBar.propTypes = {
   open: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
+  messageSuccess: PropTypes.string.isRequired,
+  messageError: PropTypes.string.isRequired,
   error: PropTypes.bool,
 };
 

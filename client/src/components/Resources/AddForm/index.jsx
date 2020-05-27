@@ -23,6 +23,8 @@ const AddForm = ({ categories }) => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     error: false,
+    messageSuccess: '',
+    messageError: '',
   });
 
   const add = () => {
@@ -47,6 +49,8 @@ const AddForm = ({ categories }) => {
           setSnackbar({
             open: true,
             error: response.statusCode !== 200,
+            messageSuccess: 'Resource added',
+            messageError: 'Resource not added',
           });
         })
         .catch(error => console.error(error));
@@ -150,7 +154,13 @@ const AddForm = ({ categories }) => {
         </DialogActions>
       </Dialog>
       {/* Snackbar */}
-      <Snackbar open={snackbar.open} toggle={toggleSnackbar} error={snackbar.error} />
+      <Snackbar
+        open={snackbar.open}
+        toggle={toggleSnackbar}
+        messageSuccess={snackbar.messageSuccess}
+        messageError={snackbar.messageError}
+        error={snackbar.error}
+      />
     </React.Fragment>
   );
 };
