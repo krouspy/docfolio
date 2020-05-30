@@ -8,6 +8,7 @@ router.get('/workspace/:workspaceId', controller.find_workspace);
 router.post('/addResource', controller.add_resource);
 router.post('/createWorkspace', controller.create_workspace);
 router.post('/createSection', controller.create_section);
-router.post('/updateWorkspace', controller.update_workspace);
+router.post('/updateHeaders', controller.update_headers);
+router.post('/updateSections', controller.update_sections);
 
 module.exports = router;

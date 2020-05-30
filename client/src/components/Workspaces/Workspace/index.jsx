@@ -13,8 +13,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
       color: 'white',
-      margin: theme.spacing(2, 0),
-      padding: theme.spacing(2),
+      margin: theme.spacing(1, 0),
+      padding: theme.spacing(1),
       backgroundColor: '#272c34',
     },
   },
@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const { workspaceId } = useParams();
-  const [sections, setSections] = useState([]);
-  const [headers, setHeaders] = useState({
+  const [data, setData] = useState({
     title: '',
     description: '',
+    sections: [],
   });
   // save initial workspace state to compare if there's any changes to toggle save button
   const [save, setSave] = useState({
@@ -51,9 +51,7 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const result = response.result[0];
-        setSections(result.sections);
-        delete result.sections;
-        setHeaders(result);
+        setData(result);
         setSave(result);
       })
       .catch(error => console.log(error));
@@ -68,7 +66,7 @@ export default () => {
 
   const updateHeaders = event => {
     const { name, value } = event.target;
-    setHeaders(prevState => ({
+    setData(prevState => ({
       ...prevState,
       [name]: value,
     }));
@@ -76,23 +74,25 @@ export default () => {
 
   const updateSection = (event, index) => {
     const { name, value } = event.target;
-    setSections(prevState => {
-      return prevState.map((element, pos) =>
+    setData(prevState => ({
+      ...prevState,
+      sections: prevState.sections.map((element, pos) =>
         index === pos ? { ...element, [name]: value } : element
-      );
-    });
+      ),
+    }));
   };
 
   const updateSave = () => {
-    setSave(headers);
+    setSave(data);
   };
 
   const checkHeadersChanges = () => {
-    return headers.title !== save.title || headers.description !== save.description;
+    return data.title !== save.title || data.description !== save.description;
   };
 
-  const { title, description } = headers;
   const update = checkHeadersChanges();
+
+  const { title, description, sections } = data;
 
   return (
     <div className={classes.root}>
@@ -104,15 +104,14 @@ export default () => {
           updateText={updateHeaders}
           name="description"
         />
-        {update && <SaveButton data={headers} updateSave={updateSave} setSnackbar={setSnackbar} />}
+        {update && <SaveButton data={data} updateSave={updateSave} setSnackbar={setSnackbar} />}
       </Paper>
-      {(sections || []).map((section, index) => {
-        const { title, content } = section;
+      {sections.map((section, index) => {
         return (
           <Section
             key={index}
-            title={title}
-            content={content}
+            workspaceId={workspaceId}
+            data={section}
             updateSection={e => updateSection(e, index)}
           />
         );
@@ -120,7 +119,7 @@ export default () => {
       <CreateSection
         workspaceId={workspaceId}
         sections={sections}
-        setSections={setSections}
+        // setSections={setSections}
         setSnackbar={setSnackbar}
       />
       <Snackbar

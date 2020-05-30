@@ -16,7 +16,7 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
   const classes = useStyles();
 
   const handleClick = () => {
-    const url = 'http://localhost:3000/api/updateWorkspace';
+    const url = 'http://localhost:3000/api/updateHeaders';
     const options = {
       method: 'POST',
       headers: {
