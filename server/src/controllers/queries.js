@@ -26,7 +26,7 @@ const find_documents = (collectionName, res, query) => {
   });
 };
 
-const find_distinct_documents = (collectionName, res) => {
+const find_distinct_documents = (collectionName, key, filter, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -37,7 +37,7 @@ const find_distinct_documents = (collectionName, res) => {
       return;
     }
     const collection = client.db(DB_NAME).collection(collectionName);
-    collection.distinct('category', (error, result) => {
+    collection.distinct(key, filter, (error, result) => {
       if (error) {
         console.log(error);
         res.send({

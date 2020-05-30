@@ -28,15 +28,13 @@ export default () => {
         <CssBaseline />
         <Drawer open={open} toggle={toggleDrawer} />
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/resources/ethereum" />
-          </Route>
-          <Route exact path="/resources">
-            <Redirect to="/resources/ethereum" />
-          </Route>
-          <Route path="/resources/:category">
-            <Resources openDrawer={open} toggleDrawer={toggleDrawer} />
-          </Route>
+          <Redirect exact from="/" to="/resources/ethereum/all" />
+          <Redirect exact from="/resources" to="/resources/ethereum/all" />
+          <Redirect exact from="/resources/:category" to="/resources/:category/all" />
+          <Route
+            path="/resources/:category/:topic"
+            render={() => <Resources openDrawer={open} toggleDrawer={toggleDrawer} />}
+          />
           <Route path="/workspaces">
             <Workspaces openDrawer={open} toggleDrawer={toggleDrawer} />
           </Route>

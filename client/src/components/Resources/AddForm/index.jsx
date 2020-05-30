@@ -4,21 +4,21 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import { capitalize } from '#utils';
+import EditableSelect from './EditableSelect';
 import Snackbar from '#snackbar';
 
-const AddForm = ({ categories }) => {
-  const [url, setURL] = useState('');
-  const [category, setCategory] = useState('');
-  const [newCategory, setNewCategory] = useState(false);
+const AddForm = ({ categories, topics }) => {
+  const [resource, setResource] = useState({
+    category: '',
+    topic: '',
+    url: '',
+  });
   const [open, setOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -28,7 +28,8 @@ const AddForm = ({ categories }) => {
   });
 
   const add = () => {
-    if (url && category) {
+    const { category, topic, url } = resource;
+    if (category && topic && url) {
       const postURL = 'http://localhost:3000/api/addResource';
       const options = {
         method: 'POST',
@@ -36,10 +37,7 @@ const AddForm = ({ categories }) => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          url,
-          category,
-        }),
+        body: JSON.stringify(resource),
       };
 
       fetch(postURL, options)
@@ -70,17 +68,15 @@ const AddForm = ({ categories }) => {
     }));
   };
 
-  const handleURL = event => {
-    setURL(event.target.value);
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setResource(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const handleCategory = event => {
-    setCategory(event.target.value);
-  };
-
-  const handleNewCategory = () => {
-    setNewCategory(!newCategory);
-  };
+  const { category, topic, url } = resource;
 
   return (
     <React.Fragment>
@@ -88,48 +84,26 @@ const AddForm = ({ categories }) => {
         Add
       </Button>
       {/* Dialog */}
-      <Dialog
-        open={open}
-        onClose={handleOpen}
-        maxWidth="xs"
-        fullWidth
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle>Add Source</DialogTitle>
+      <Dialog open={open} onClose={handleOpen} maxWidth="xs" fullWidth>
+        <DialogTitle>Add Resource</DialogTitle>
         <DialogContent dividers>
-          <TextField
-            fullWidth
-            select={!newCategory}
+          {/* Category */}
+          <EditableSelect
+            name="category"
+            list={categories}
             value={category}
-            onChange={handleCategory}
-            label={newCategory ? 'Create Category' : 'Select Category'}
-            variant="outlined"
-            margin="dense"
-            helperText="Click on left icon to Select or Create a category"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={handleNewCategory}
-                    style={{ marginRight: -12 }}
-                  >
-                    <AddCircleIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          >
-            {categories.map(option => (
-              <MenuItem key={option} value={option}>
-                {capitalize(option)}
-              </MenuItem>
-            ))}
-          </TextField>
+            handleChange={handleChange}
+            helper
+          />
+
+          {/* Topic */}
+          <EditableSelect name="topic" list={topics} value={topic} handleChange={handleChange} />
+
+          {/* url */}
           <TextField
+            name="url"
             value={url}
-            onChange={handleURL}
+            onChange={handleChange}
             label="url"
             variant="outlined"
             type="text"
@@ -167,6 +141,7 @@ const AddForm = ({ categories }) => {
 
 AddForm.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string),
+  topics: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default AddForm;

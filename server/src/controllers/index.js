@@ -3,15 +3,29 @@ const { find_documents, find_distinct_documents, insert_document, update_documen
 const COL_RESOURCES = process.env.COL_RESOURCES;
 const COL_WORKSPACES = process.env.COL_WORKSPACES;
 
-const find_category = (req, res) => {
-  const query = {
-    category: req.params.category,
-  };
-  find_documents(COL_RESOURCES, res, query);
+const find_categories = (_, res) => {
+  const key = 'category';
+  const filter = {};
+  find_distinct_documents(COL_RESOURCES, key, filter, res);
 };
 
-const find_categories = (_, res) => {
-  find_distinct_documents(COL_RESOURCES, res);
+const find_topics = (req, res) => {
+  const key = 'topic';
+  const filter = {
+    category: req.params.category,
+  };
+  find_distinct_documents(COL_RESOURCES, key, filter, res);
+};
+
+const find_topic = (req, res) => {
+  const { category, topic } = req.params;
+  const query = {
+    category: category,
+  };
+  if (topic !== 'all') {
+    query.topic = topic;
+  }
+  find_documents(COL_RESOURCES, res, query);
 };
 
 const find_workspaces = (_, res) => {
@@ -29,7 +43,8 @@ const find_workspace = (req, res) => {
 const add_resource = (req, res) => {
   const { url } = req.body;
   const category = req.body.category.toLowerCase();
-  const query = { url, category };
+  const topic = req.body.topic.toLowerCase();
+  const query = { url, category, topic };
   insert_document(COL_RESOURCES, query, res);
 };
 
@@ -63,8 +78,9 @@ const update_workspace = (req, res) => {
 };
 
 module.exports = {
-  find_category,
   find_categories,
+  find_topics,
+  find_topic,
   find_workspaces,
   find_workspace,
   add_resource,

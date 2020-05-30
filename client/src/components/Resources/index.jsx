@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MicroLink from '@microlink/react';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteMatch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import TopBar from '../TopBar';
+import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
 import Wrapper from '../Wrapper';
 import CustomNavLink from '#customNavLink';
@@ -38,7 +39,8 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { category } = useParams();
+  const [topics, setTopics] = useState([]);
+  const { category, topic } = useParams();
 
   useEffect(() => {
     const url = 'http://localhost:3000/api/categories';
@@ -51,14 +53,24 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   }, []);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/category/${category}`;
+    const url = `http://localhost:3000/api/category/${category}/topics`;
+    fetch(url)
+      .then(response => response.json())
+      .then(response => {
+        setTopics(['all'].concat(response.result));
+      })
+      .catch(error => console.error(error));
+  }, [category]);
+
+  useEffect(() => {
+    const url = `http://localhost:3000/api/category/${category}/${topic}`;
     fetch(url)
       .then(response => response.json())
       .then(response => {
         setData(response.result);
       })
       .catch(error => console.error(error));
-  }, [category]);
+  }, [category, topic]);
 
   return (
     <React.Fragment>
@@ -70,8 +82,17 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
             </Typography>
           ))}
         </div>
-        <AddForm categories={categories} />
+        <AddForm categories={categories} topics={topics.filter(topic => topic !== 'all')} />
       </TopBar>
+      <TopicsBar openDrawer={openDrawer}>
+        <div className={classes.categories}>
+          {topics.map((topic, index) => (
+            <Typography key={index} className={classes.title} variant="subtitle1" noWrap>
+              <CustomNavLink route={`${topic}`}>{topic}</CustomNavLink>
+            </Typography>
+          ))}
+        </div>
+      </TopicsBar>
       <Wrapper size="lg">
         <Grid container spacing={4}>
           {data.map((element, id) => (
