@@ -75,6 +75,17 @@ const update_one_section = (req, res) => {
   update_document(COL_WORKSPACES, filter, query, res);
 };
 
+const delete_one_section = (req, res) => {
+  const { id, position } = req.body;
+  const filter = { id: parseInt(id) };
+  const query = {
+    $pull: {
+      sections: { position },
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
+};
+
 module.exports = {
   find_category,
   find_categories,
@@ -85,4 +96,5 @@ module.exports = {
   create_section,
   update_headers,
   update_one_section,
+  delete_one_section,
 };

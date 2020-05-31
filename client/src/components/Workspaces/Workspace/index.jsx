@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from '#customHooks';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
@@ -8,6 +7,7 @@ import Section from './Section';
 import CreateSection from './CreateSection';
 import Editable from './Editable';
 import SaveButton from './SaveButton';
+import { useSnackbar } from '#customHooks';
 import Snackbar from '#snackbar';
 
 const useStyles = makeStyles(theme => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     '& > *': {
       color: 'white',
       margin: theme.spacing(1, 0),
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
       backgroundColor: '#272c34',
     },
   },
@@ -61,16 +61,6 @@ export default () => {
     }));
   };
 
-  const updateSection = (event, index) => {
-    const { name, value } = event.target;
-    setData(prevState => ({
-      ...prevState,
-      sections: prevState.sections.map((element, pos) =>
-        index === pos ? { ...element, [name]: value } : element
-      ),
-    }));
-  };
-
   const createSection = () => {
     const url = `http://localhost:3000/api/createSection`;
     const newSection = {
@@ -93,6 +83,7 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const { statusCode } = response;
+        toggleSnackbar('Create section', statusCode !== 200);
         if (statusCode === 200) {
           setData(prevState => {
             const sections = prevState.sections;
@@ -136,10 +127,10 @@ export default () => {
         return (
           <Section
             key={index}
+            section={section}
             workspaceId={workspaceId}
-            data={section}
-            updateSection={e => updateSection(e, index)}
             toggleSnackbar={toggleSnackbar}
+            setData={setData}
           />
         );
       })}

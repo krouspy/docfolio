@@ -10,5 +10,6 @@ router.post('/createWorkspace', controller.create_workspace);
 router.post('/createSection', controller.create_section);
 router.post('/updateHeaders', controller.update_headers);
 router.post('/updateOneSection', controller.update_one_section);
+router.delete('/deleteSection', controller.delete_one_section);
 
 module.exports = router;

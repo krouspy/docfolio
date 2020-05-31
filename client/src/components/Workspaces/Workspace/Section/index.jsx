@@ -6,8 +6,12 @@ import Paper from '@material-ui/core/Paper';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+
+import { useDialog } from '#customHooks';
+import DialogConfirmation from './DialogConfirmation';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,14 +26,16 @@ const useStyles = makeStyles(theme => ({
     maxWidth: '100%',
     minWidth: '100%',
   },
-  content: {
+  markdown: {
     position: 'relative',
   },
-  editButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    color: 'white',
+  buttons: {
+    'position': 'absolute',
+    'top': 0,
+    'right': 0,
+    '& > *': {
+      color: 'white',
+    },
   },
   checkButton: {
     'color': 'white',
@@ -47,9 +53,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Section = ({ workspaceId, data, updateSection, toggleSnackbar }) => {
+const Section = ({ workspaceId, section, toggleSnackbar, setData }) => {
   const classes = useStyles();
   const [isEditing, setEditing] = useState(false);
+  const [isVisible, setVisible] = useState(false);
+  const [open, toggleDialog] = useDialog();
+
+  const updateSection = event => {
+    const position = section.position;
+    const { name, value } = event.target;
+    setData(prevState => ({
+      ...prevState,
+      sections: prevState.sections.map((element, pos) =>
+        position === pos ? { ...element, [name]: value } : element
+      ),
+    }));
+  };
 
   const sendUpdate = () => {
     const url = `http://localhost:3000/api/updateOneSection`;
@@ -61,7 +80,7 @@ const Section = ({ workspaceId, data, updateSection, toggleSnackbar }) => {
       },
       body: JSON.stringify({
         id: workspaceId,
-        section: data,
+        section: section,
       }),
     };
 
@@ -75,14 +94,52 @@ const Section = ({ workspaceId, data, updateSection, toggleSnackbar }) => {
       .catch(error => console.error(error));
   };
 
+  const deleteSection = () => {
+    const position = section.position;
+    const url = 'http://localhost:3000/api/deleteSection';
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: workspaceId,
+        position: position,
+      }),
+    };
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(response => {
+        const statusCode = response.statusCode;
+        toggleSnackbar('Delete section', statusCode !== 200);
+        if (statusCode === 200) {
+          setData(prevState => ({
+            ...prevState,
+            sections: prevState.sections.filter(element => {
+              return element.position !== position;
+            }),
+          }));
+        }
+      })
+      .catch(error => console.error(error));
+  };
+
+  const { content } = section;
+
   return (
-    <Paper className={classes.root}>
+    <Paper
+      className={classes.root}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+    >
       {isEditing ? (
         <div>
           <TextareaAutosize
             name="content"
             rowsMin={15}
-            value={data.content}
+            value={content}
             onChange={updateSection}
             className={classes.textarea}
           />
@@ -94,22 +151,30 @@ const Section = ({ workspaceId, data, updateSection, toggleSnackbar }) => {
           </IconButton>
         </div>
       ) : (
-        <div className={classes.content}>
-          <Markdown source={data.content} />
-          <IconButton onClick={() => setEditing(true)} className={classes.editButton}>
-            <EditIcon />
-          </IconButton>
+        <div className={classes.markdown}>
+          <Markdown source={content} />
+          {isVisible && (
+            <div className={classes.buttons}>
+              <IconButton onClick={toggleDialog}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton onClick={() => setEditing(true)}>
+                <EditIcon />
+              </IconButton>
+            </div>
+          )}
         </div>
       )}
+      <DialogConfirmation open={open} toggle={toggleDialog} deleteSection={deleteSection} />
     </Paper>
   );
 };
 
 Section.propTypes = {
   workspaceId: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,
-  updateSection: PropTypes.func.isRequired,
+  section: PropTypes.object.isRequired,
   toggleSnackbar: PropTypes.func.isRequired,
+  setData: PropTypes.func.isRequired,
 };
 
 export default Section;
