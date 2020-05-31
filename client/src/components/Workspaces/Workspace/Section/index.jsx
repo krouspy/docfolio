@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    minHeight: 250,
   },
   textarea: {
     color: 'white',
@@ -46,12 +47,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Section = ({ workspaceId, data, updateSection }) => {
+const Section = ({ workspaceId, data, updateSection, toggleSnackbar }) => {
   const classes = useStyles();
   const [isEditing, setEditing] = useState(false);
 
   const sendUpdate = () => {
-    const url = `http://localhost:3000/api/updateSections`;
+    const url = `http://localhost:3000/api/updateOneSection`;
     const options = {
       method: 'POST',
       headers: {
@@ -60,12 +61,17 @@ const Section = ({ workspaceId, data, updateSection }) => {
       },
       body: JSON.stringify({
         id: workspaceId,
-        sections: data,
+        section: data,
       }),
     };
+
     fetch(url, options)
       .then(response => response.json())
-      .then(response => console.log(response))
+      .then(response => {
+        const statusCode = response.statusCode;
+        toggleSnackbar('Update Section', statusCode !== 200);
+        setEditing(statusCode !== 200);
+      })
       .catch(error => console.error(error));
   };
 
@@ -103,6 +109,7 @@ Section.propTypes = {
   workspaceId: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
   updateSection: PropTypes.func.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 export default Section;

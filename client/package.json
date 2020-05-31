@@ -22,9 +22,10 @@
     "prettier": "^2.0.5"
   },
   "alias": {
-    "#utils": "./src/utils",
     "#customNavLink": "./src/components/CustomNavLink",
-    "#snackbar": "./src/components/Snackbar"
+    "#customHooks": "./src/components/Hooks",
+    "#snackbar": "./src/components/Snackbar",
+    "#utils": "./src/utils"
   },
   "browserslist": {
     "production": [

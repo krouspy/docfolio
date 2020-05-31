@@ -21,50 +21,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const CreateSection = ({ workspaceId, setSnackbar }) => {
+const CreateSection = ({ createSection, workspaceId }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-
-  const toggleOpen = () => {
-    setOpen(!open);
-  };
-
-  const createSection = () => {
-    const url = 'http://localhost:3000/api/createSection';
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: workspaceId,
-        section,
-      }),
-    };
-    fetch(url, options)
-      .then(response => response.json())
-      .then(response => {
-        const { statusCode } = response;
-        if (statusCode === 200) {
-          console.log(response);
-          // setSections(sections.concat([section]));
-          // updateSave();
-        }
-        setOpen(false);
-        setSnackbar({
-          open: true,
-          error: statusCode !== 200,
-          messageSuccess: 'Section created',
-          messageError: 'Section not created',
-        });
-      })
-      .catch(error => console.log(error));
-  };
 
   return (
     <React.Fragment>
-      <div onClick={toggleOpen} className={classes.root}>
+      <div onClick={createSection} className={classes.root}>
         <AddCircleIcon fontSize="large" className={classes.icon} />
         <Typography variant="h6">Create Section</Typography>
       </div>
@@ -74,8 +36,7 @@ const CreateSection = ({ workspaceId, setSnackbar }) => {
 
 CreateSection.propTypes = {
   workspaceId: PropTypes.string.isRequired,
-  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // setSections: PropTypes.func.isRequired,
+  createSection: PropTypes.func.isRequired,
 };
 
 export default CreateSection;

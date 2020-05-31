@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SaveButton = ({ data, updateSave, setSnackbar }) => {
+const SaveButton = ({ data, updateSave, toggleSnackbar }) => {
   const classes = useStyles();
 
   const handleClick = () => {
@@ -33,12 +33,7 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
         if (statusCode === 200) {
           updateSave();
         }
-        setSnackbar({
-          open: true,
-          error: statusCode !== 200,
-          messageSuccess: 'Changes saved',
-          messageError: 'Changes not saved',
-        });
+        toggleSnackbar('Save changes', statusCode !== 200);
       })
       .catch(error => console.log(error));
   };
@@ -53,7 +48,7 @@ const SaveButton = ({ data, updateSave, setSnackbar }) => {
 SaveButton.propTypes = {
   data: PropTypes.object.isRequired,
   updateSave: PropTypes.func.isRequired,
-  setSnackbar: PropTypes.func.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 export default SaveButton;

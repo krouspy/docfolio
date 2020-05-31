@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSnackbar } from '#customHooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,20 +13,15 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import { capitalize } from '#utils';
 import Snackbar from '#snackbar';
+import { capitalize } from '#utils';
 
 const AddForm = ({ categories }) => {
   const [url, setURL] = useState('');
   const [category, setCategory] = useState('');
   const [newCategory, setNewCategory] = useState(false);
   const [open, setOpen] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-    messageSuccess: '',
-    messageError: '',
-  });
+  const [snackbar, toggleSnackbar] = useSnackbar('Add Resource');
 
   const add = () => {
     if (url && category) {
@@ -46,12 +42,7 @@ const AddForm = ({ categories }) => {
         .then(response => response.json())
         .then(response => {
           setOpen(false);
-          setSnackbar({
-            open: true,
-            error: response.statusCode !== 200,
-            messageSuccess: 'Resource added',
-            messageError: 'Resource not added',
-          });
+          toggleSnackbar('Add Resource', response.statusCode !== 200);
         })
         .catch(error => console.error(error));
     } else {
@@ -61,13 +52,6 @@ const AddForm = ({ categories }) => {
 
   const handleOpen = () => {
     setOpen(!open);
-  };
-
-  const toggleSnackbar = () => {
-    setSnackbar(prevState => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
   };
 
   const handleURL = event => {
@@ -157,8 +141,7 @@ const AddForm = ({ categories }) => {
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
-        messageSuccess={snackbar.messageSuccess}
-        messageError={snackbar.messageError}
+        text={snackbar.text}
         error={snackbar.error}
       />
     </React.Fragment>

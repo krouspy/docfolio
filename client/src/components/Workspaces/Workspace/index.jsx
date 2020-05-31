@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSnackbar } from '#customHooks';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
@@ -38,12 +39,7 @@ export default () => {
     title: '',
     description: '',
   });
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-    messageSuccess: '',
-    messageError: '',
-  });
+  const [snackbar, toggleSnackbar] = useSnackbar();
 
   useEffect(() => {
     const url = `http://localhost:3000/api/workspace/${workspaceId}`;
@@ -56,13 +52,6 @@ export default () => {
       })
       .catch(error => console.log(error));
   }, []);
-
-  const toggleSnackbar = () => {
-    setSnackbar(prevState => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
-  };
 
   const updateHeaders = event => {
     const { name, value } = event.target;
@@ -80,6 +69,41 @@ export default () => {
         index === pos ? { ...element, [name]: value } : element
       ),
     }));
+  };
+
+  const createSection = () => {
+    const url = `http://localhost:3000/api/createSection`;
+    const newSection = {
+      position: data.sections.length,
+      content: '## Edit me!',
+    };
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: workspaceId,
+        section: newSection,
+      }),
+    };
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(response => {
+        const { statusCode } = response;
+        if (statusCode === 200) {
+          setData(prevState => {
+            const sections = prevState.sections;
+            return {
+              ...prevState,
+              sections: [...sections, newSection],
+            };
+          });
+        }
+      })
+      .catch(error => console.error(error));
   };
 
   const updateSave = () => {
@@ -104,7 +128,9 @@ export default () => {
           updateText={updateHeaders}
           name="description"
         />
-        {update && <SaveButton data={data} updateSave={updateSave} setSnackbar={setSnackbar} />}
+        {update && (
+          <SaveButton data={data} updateSave={updateSave} toggleSnackbar={toggleSnackbar} />
+        )}
       </Paper>
       {sections.map((section, index) => {
         return (
@@ -113,20 +139,19 @@ export default () => {
             workspaceId={workspaceId}
             data={section}
             updateSection={e => updateSection(e, index)}
+            toggleSnackbar={toggleSnackbar}
           />
         );
       })}
       <CreateSection
+        createSection={createSection}
         workspaceId={workspaceId}
-        sections={sections}
-        // setSections={setSections}
-        setSnackbar={setSnackbar}
+        toggleSnackbar={toggleSnackbar}
       />
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
-        messageSuccess={snackbar.messageSuccess}
-        messageError={snackbar.messageError}
+        text={snackbar.text}
         error={snackbar.error}
       />
     </div>
