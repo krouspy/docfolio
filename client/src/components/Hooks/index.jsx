@@ -1,3 +1,4 @@
 import useSnackbar from './useSnackbar';
+import useDialog from './useDialog';
 
-export { useSnackbar };
+export { useSnackbar, useDialog };
