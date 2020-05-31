@@ -51,13 +51,12 @@ const create_section = (req, res) => {
 };
 
 const update_headers = (req, res) => {
-  const { id, title, description, section } = req.body;
+  const { id, title, description } = req.body;
   const filter = { id: parseInt(id) };
   const query = {
     $set: {
       title,
       description,
-      section,
     },
   };
   update_document(COL_WORKSPACES, filter, query, res);
