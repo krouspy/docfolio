@@ -123,7 +123,7 @@ export default () => {
           <SaveButton data={data} updateSave={updateSave} toggleSnackbar={toggleSnackbar} />
         )}
       </Paper>
-      {sections.map((section, index) => {
+      {(sections || []).map((section, index) => {
         return (
           <Section
             key={index}
