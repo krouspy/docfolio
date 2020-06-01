@@ -7,16 +7,16 @@ const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-const SnackBar = ({ open, toggle, messageSuccess, messageError, error }) => {
+const SnackBar = ({ open, toggle, text, error }) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={open}
-      onClose={toggle}
+      onClose={() => toggle(text, error)}
       autoHideDuration={3000}
     >
       <Alert onClose={toggle} severity={error ? 'error' : 'success'}>
-        {error ? `Error: ${messageError}` : `Success: ${messageSuccess}`}
+        {text}
       </Alert>
     </Snackbar>
   );
@@ -29,8 +29,7 @@ SnackBar.defaultProps = {
 SnackBar.propTypes = {
   open: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
-  messageSuccess: PropTypes.string.isRequired,
-  messageError: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
   error: PropTypes.bool,
 };
 

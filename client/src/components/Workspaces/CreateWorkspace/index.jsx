@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSnackbar } from '#customHooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+
 import Snackbar from '#snackbar';
 
 const CreateWorkspace = ({ totalWorkspaces }) => {
@@ -15,12 +17,7 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
     title: '',
     description: '',
   });
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-    messageSuccess: '',
-    messageError: '',
-  });
+  const [snackbar, toggleSnackbar] = useSnackbar('Create workspace');
 
   const toggleOpen = () => {
     setOpen(!open);
@@ -31,13 +28,6 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
     setData(prevState => ({
       ...prevState,
       [name]: value,
-    }));
-  };
-
-  const toggleSnackbar = () => {
-    setSnackbar(prevState => ({
-      ...prevState,
-      open: !prevState.open,
     }));
   };
 
@@ -64,12 +54,7 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
           console.log(response);
           const { statusCode } = response;
           setOpen(false);
-          setSnackbar({
-            open: true,
-            error: statusCode !== 200,
-            messageSuccess: 'Workspace created',
-            messageError: 'Workspace not created',
-          });
+          toggleSnackbar(statusCode !== 200);
         })
         .catch(error => console.log(error));
     } else {
@@ -120,8 +105,7 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
-        messageSuccess={snackbar.messageSuccess}
-        messageError={snackbar.messageError}
+        text={snackbar.text}
         error={snackbar.error}
       />
     </React.Fragment>

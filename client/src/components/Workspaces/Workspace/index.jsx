@@ -7,13 +7,14 @@ import Section from './Section';
 import CreateSection from './CreateSection';
 import Editable from './Editable';
 import SaveButton from './SaveButton';
+import { useSnackbar } from '#customHooks';
 import Snackbar from '#snackbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
     '& > *': {
       color: 'white',
-      margin: theme.spacing(2, 0),
+      margin: theme.spacing(1, 0),
       padding: theme.spacing(2),
       backgroundColor: '#272c34',
     },
@@ -28,22 +29,17 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const { workspaceId } = useParams();
-  const [sections, setSections] = useState([]);
-  const [headers, setHeaders] = useState({
+  const [data, setData] = useState({
     title: '',
     description: '',
+    sections: [],
   });
   // save initial workspace state to compare if there's any changes to toggle save button
   const [save, setSave] = useState({
     title: '',
     description: '',
   });
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-    messageSuccess: '',
-    messageError: '',
-  });
+  const [snackbar, toggleSnackbar] = useSnackbar();
 
   useEffect(() => {
     const url = `http://localhost:3000/api/workspace/${workspaceId}`;
@@ -51,48 +47,67 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const result = response.result[0];
-        setSections(result.sections);
-        delete result.sections;
-        setHeaders(result);
+        setData(result);
         setSave(result);
       })
       .catch(error => console.log(error));
   }, []);
 
-  const toggleSnackbar = () => {
-    setSnackbar(prevState => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
-  };
-
   const updateHeaders = event => {
     const { name, value } = event.target;
-    setHeaders(prevState => ({
+    setData(prevState => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const updateSection = (event, index) => {
-    const { name, value } = event.target;
-    setSections(prevState => {
-      return prevState.map((element, pos) =>
-        index === pos ? { ...element, [name]: value } : element
-      );
-    });
+  const createSection = () => {
+    const url = `http://localhost:3000/api/createSection`;
+    const newSection = {
+      position: data.sections.length,
+      content: '## Edit me!',
+    };
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: workspaceId,
+        section: newSection,
+      }),
+    };
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(response => {
+        const { statusCode } = response;
+        toggleSnackbar('Create section', statusCode !== 200);
+        if (statusCode === 200) {
+          setData(prevState => {
+            const sections = prevState.sections;
+            return {
+              ...prevState,
+              sections: [...sections, newSection],
+            };
+          });
+        }
+      })
+      .catch(error => console.error(error));
   };
 
   const updateSave = () => {
-    setSave(headers);
+    setSave(data);
   };
 
   const checkHeadersChanges = () => {
-    return headers.title !== save.title || headers.description !== save.description;
+    return data.title !== save.title || data.description !== save.description;
   };
 
-  const { title, description } = headers;
   const update = checkHeadersChanges();
+
+  const { title, description, sections } = data;
 
   return (
     <div className={classes.root}>
@@ -104,30 +119,30 @@ export default () => {
           updateText={updateHeaders}
           name="description"
         />
-        {update && <SaveButton data={headers} updateSave={updateSave} setSnackbar={setSnackbar} />}
+        {update && (
+          <SaveButton data={data} updateSave={updateSave} toggleSnackbar={toggleSnackbar} />
+        )}
       </Paper>
-      {(sections || []).map((section, index) => {
-        const { title, content } = section;
+      {sections.map((section, index) => {
         return (
           <Section
             key={index}
-            title={title}
-            content={content}
-            updateSection={e => updateSection(e, index)}
+            section={section}
+            workspaceId={workspaceId}
+            toggleSnackbar={toggleSnackbar}
+            setData={setData}
           />
         );
       })}
       <CreateSection
+        createSection={createSection}
         workspaceId={workspaceId}
-        sections={sections}
-        setSections={setSections}
-        setSnackbar={setSnackbar}
+        toggleSnackbar={toggleSnackbar}
       />
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
-        messageSuccess={snackbar.messageSuccess}
-        messageError={snackbar.messageError}
+        text={snackbar.text}
         error={snackbar.error}
       />
     </div>

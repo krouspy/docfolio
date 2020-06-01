@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSnackbar } from '#customHooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -20,12 +21,7 @@ const AddForm = ({ categories, topics }) => {
     url: '',
   });
   const [open, setOpen] = useState(false);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    error: false,
-    messageSuccess: '',
-    messageError: '',
-  });
+  const [snackbar, toggleSnackbar] = useSnackbar('Add Resource');
 
   const add = () => {
     const { category, topic, url } = resource;
@@ -44,12 +40,7 @@ const AddForm = ({ categories, topics }) => {
         .then(response => response.json())
         .then(response => {
           setOpen(false);
-          setSnackbar({
-            open: true,
-            error: response.statusCode !== 200,
-            messageSuccess: 'Resource added',
-            messageError: 'Resource not added',
-          });
+          toggleSnackbar('Add Resource', response.statusCode !== 200);
         })
         .catch(error => console.error(error));
     } else {
@@ -59,13 +50,6 @@ const AddForm = ({ categories, topics }) => {
 
   const handleOpen = () => {
     setOpen(!open);
-  };
-
-  const toggleSnackbar = () => {
-    setSnackbar(prevState => ({
-      ...prevState,
-      open: !prevState.open,
-    }));
   };
 
   const handleChange = event => {
@@ -131,8 +115,7 @@ const AddForm = ({ categories, topics }) => {
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
-        messageSuccess={snackbar.messageSuccess}
-        messageError={snackbar.messageError}
+        text={snackbar.text}
         error={snackbar.error}
       />
     </React.Fragment>

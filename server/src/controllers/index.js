@@ -65,13 +65,36 @@ const create_section = (req, res) => {
   update_document(COL_WORKSPACES, filter, query, res);
 };
 
-const update_workspace = (req, res) => {
+const update_headers = (req, res) => {
   const { id, title, description } = req.body;
-  const filter = { id };
+  const filter = { id: parseInt(id) };
   const query = {
     $set: {
       title,
       description,
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
+};
+
+const update_one_section = (req, res) => {
+  const { id, section } = req.body;
+  const { position, content } = section;
+  const filter = { 'id': parseInt(id), 'sections.position': parseInt(position) };
+  const query = {
+    $set: {
+      'sections.$.content': content,
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
+};
+
+const delete_one_section = (req, res) => {
+  const { id, position } = req.body;
+  const filter = { id: parseInt(id) };
+  const query = {
+    $pull: {
+      sections: { position },
     },
   };
   update_document(COL_WORKSPACES, filter, query, res);
@@ -86,5 +109,7 @@ module.exports = {
   add_resource,
   create_workspace,
   create_section,
-  update_workspace,
+  update_headers,
+  update_one_section,
+  delete_one_section,
 };
