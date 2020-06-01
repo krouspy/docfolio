@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./src/index.js",
-    "dev": "concurrently \"nodemon ./src/index.js\" \"cd client && yarn start\"",
-    "setup": "yarn && cd client && yarn"
+    "heroku-postbuild": "yarn && cd client && yarn && yarn build",
+    "dev": "concurrently \"nodemon ./src/index.js\" \"cd client && yarn start\""
   },
   "dependencies": {
     "body-parser": "^1.19.0",
