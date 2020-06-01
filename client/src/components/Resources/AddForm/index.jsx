@@ -13,6 +13,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import EditableSelect from './EditableSelect';
 import Snackbar from '#snackbar';
+import { capitalize } from '#utils';
 
 const AddForm = ({ categories, topics }) => {
   const [resource, setResource] = useState({
