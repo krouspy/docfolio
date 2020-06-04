@@ -14,7 +14,6 @@ const Workspaces = ({ openDrawer, toggleDrawer }) => {
   const { path } = useRouteMatch();
 
   useEffect(() => {
-    // const url = 'http://localhost:3000/api/workspaces';
     const url = '/api/workspaces';
     fetch(url)
       .then(response => response.json())

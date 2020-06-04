@@ -71,8 +71,7 @@ const Section = ({ workspaceId, section, toggleSnackbar, setData }) => {
   };
 
   const sendUpdate = () => {
-    const url = `http://localhost:3000/api/updateOneSection`;
-    // const url = `/api/updateOneSection`;
+    const url = `/api/updateOneSection`;
     const options = {
       method: 'POST',
       headers: {
@@ -97,7 +96,6 @@ const Section = ({ workspaceId, section, toggleSnackbar, setData }) => {
 
   const deleteSection = () => {
     const position = section.position;
-    // const url = 'http://localhost:3000/api/deleteSection';
     const url = '/api/deleteSection';
     const options = {
       method: 'DELETE',

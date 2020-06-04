@@ -42,7 +42,6 @@ export default () => {
   const [snackbar, toggleSnackbar] = useSnackbar();
 
   useEffect(() => {
-    // const url = `http://localhost:3000/api/workspace/${workspaceId}`;
     const url = `/api/workspace/${workspaceId}`;
     fetch(url)
       .then(response => response.json())
@@ -63,7 +62,6 @@ export default () => {
   };
 
   const createSection = () => {
-    // const url = `http://localhost:3000/api/createSection`;
     const url = `/api/createSection`;
     const newSection = {
       position: data.sections.length,

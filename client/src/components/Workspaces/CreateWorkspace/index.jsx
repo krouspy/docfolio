@@ -34,7 +34,6 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
   const createWorkspace = () => {
     const { title, description } = data;
     if (title && description) {
-      // const postURL = 'http://localhost:3000/api/createWorkspace';
       const postURL = '/api/createWorkspace';
       const options = {
         method: 'POST',

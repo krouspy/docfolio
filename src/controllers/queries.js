@@ -1,7 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert').strict;
 
-// const MONGO_URI = process.env.MONGO_URI;
 const MONGO_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.DB_NAME;
 

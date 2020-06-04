@@ -16,7 +16,6 @@ const SaveButton = ({ data, updateSave, toggleSnackbar }) => {
   const classes = useStyles();
 
   const handleClick = () => {
-    // const url = 'http://localhost:3000/api/updateHeaders';
     const url = '/api/updateHeaders';
     const options = {
       method: 'POST',

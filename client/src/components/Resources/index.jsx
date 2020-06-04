@@ -43,7 +43,6 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   const { category, topic } = useParams();
 
   useEffect(() => {
-    // const url = 'http://localhost:3000/api/categories';
     const url = '/api/categories';
     fetch(url)
       .then(response => response.json())
@@ -54,7 +53,6 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   }, []);
 
   useEffect(() => {
-    // const url = `http://localhost:3000/api/category/${category}/topics`;
     const url = `/api/category/${category}/topics`;
     fetch(url)
       .then(response => response.json())
@@ -65,7 +63,6 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   }, [category]);
 
   useEffect(() => {
-    // const url = `http://localhost:3000/api/category/${category}/${topic}`;
     const url = `/api/category/${category}/${topic}`;
     fetch(url)
       .then(response => response.json())

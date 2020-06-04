@@ -26,7 +26,6 @@ const AddForm = ({ categories, topics }) => {
   const add = () => {
     const { category, topic, url } = resource;
     if (category && topic && url) {
-      // const postURL = 'http://localhost:3000/api/addResource';
       const postURL = '/api/addResource';
       const options = {
         method: 'POST',
