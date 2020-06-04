@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSnackbar } from '#customHooks';
+import { useSnackbar } from 'components/Hooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,8 +12,7 @@ import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import EditableSelect from './EditableSelect';
-import Snackbar from '#snackbar';
-import { capitalize } from '#utils';
+import Snackbar from 'components/Snackbar';
 
 const AddForm = ({ categories, topics }) => {
   const [resource, setResource] = useState({
@@ -27,7 +26,8 @@ const AddForm = ({ categories, topics }) => {
   const add = () => {
     const { category, topic, url } = resource;
     if (category && topic && url) {
-      const postURL = 'http://localhost:3000/api/addResource';
+      // const postURL = 'http://localhost:3000/api/addResource';
+      const postURL = '/api/addResource';
       const options = {
         method: 'POST',
         headers: {

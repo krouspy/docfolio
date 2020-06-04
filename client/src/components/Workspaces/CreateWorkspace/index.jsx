@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSnackbar } from '#customHooks';
+import { useSnackbar } from 'components/Hooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import Snackbar from '#snackbar';
+import Snackbar from 'components/Snackbar';
 
 const CreateWorkspace = ({ totalWorkspaces }) => {
   const [open, setOpen] = useState(false);
@@ -34,7 +34,8 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
   const createWorkspace = () => {
     const { title, description } = data;
     if (title && description) {
-      const postURL = 'http://localhost:3000/api/createWorkspace';
+      // const postURL = 'http://localhost:3000/api/createWorkspace';
+      const postURL = '/api/createWorkspace';
       const options = {
         method: 'POST',
         headers: {

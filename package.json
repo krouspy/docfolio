@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "concurrently \"node ./src/index.js\" \"cd client && yarn start\"",
     "heroku-postbuild": "cd client && yarn && yarn build",
     "dev": "concurrently \"nodemon ./src/index.js\" \"cd client && yarn start\""
   },

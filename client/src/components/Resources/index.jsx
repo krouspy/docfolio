@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MicroLink from '@microlink/react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +10,7 @@ import TopBar from '../TopBar';
 import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
 import Wrapper from '../Wrapper';
-import CustomNavLink from '#customNavLink';
+import CustomNavLink from 'components/CustomNavLink';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -43,7 +43,8 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   const { category, topic } = useParams();
 
   useEffect(() => {
-    const url = 'http://localhost:3000/api/categories';
+    // const url = 'http://localhost:3000/api/categories';
+    const url = '/api/categories';
     fetch(url)
       .then(response => response.json())
       .then(response => {
@@ -53,7 +54,8 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   }, []);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/category/${category}/topics`;
+    // const url = `http://localhost:3000/api/category/${category}/topics`;
+    const url = `/api/category/${category}/topics`;
     fetch(url)
       .then(response => response.json())
       .then(response => {
@@ -63,7 +65,8 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   }, [category]);
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/category/${category}/${topic}`;
+    // const url = `http://localhost:3000/api/category/${category}/${topic}`;
+    const url = `/api/category/${category}/${topic}`;
     fetch(url)
       .then(response => response.json())
       .then(response => {

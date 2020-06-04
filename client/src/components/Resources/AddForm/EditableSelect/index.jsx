@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import { capitalize } from '#utils';
+import { capitalize } from 'utils';
 
 const EditableSelect = ({ name, list, value, handleChange, helper }) => {
   const [select, setSelect] = useState(false);

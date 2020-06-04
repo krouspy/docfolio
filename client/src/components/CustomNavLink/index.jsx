@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-import { capitalize } from '#utils';
+import { capitalize } from 'utils';
 
 const CustomNavLink = ({ route, children, ...rest }) => {
   return (

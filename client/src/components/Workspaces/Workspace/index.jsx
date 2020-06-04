@@ -7,8 +7,8 @@ import Section from './Section';
 import CreateSection from './CreateSection';
 import Editable from './Editable';
 import SaveButton from './SaveButton';
-import { useSnackbar } from '#customHooks';
-import Snackbar from '#snackbar';
+import { useSnackbar } from 'components/Hooks';
+import Snackbar from 'components/Snackbar';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,7 +42,8 @@ export default () => {
   const [snackbar, toggleSnackbar] = useSnackbar();
 
   useEffect(() => {
-    const url = `http://localhost:3000/api/workspace/${workspaceId}`;
+    // const url = `http://localhost:3000/api/workspace/${workspaceId}`;
+    const url = `/api/workspace/${workspaceId}`;
     fetch(url)
       .then(response => response.json())
       .then(response => {
@@ -62,7 +63,8 @@ export default () => {
   };
 
   const createSection = () => {
-    const url = `http://localhost:3000/api/createSection`;
+    // const url = `http://localhost:3000/api/createSection`;
+    const url = `/api/createSection`;
     const newSection = {
       position: data.sections.length,
       content: '## Edit me!',
