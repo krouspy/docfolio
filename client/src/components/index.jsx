@@ -9,6 +9,7 @@ import Workspaces from './Workspaces';
 
 const useStyles = makeStyles({
   root: {
+    display: 'flex',
     minHeight: '100vh',
     backgroundColor: '#1e2732',
   },
@@ -27,18 +28,20 @@ export default () => {
       <div className={classes.root}>
         <CssBaseline />
         <Drawer open={open} toggle={toggleDrawer} />
-        <Switch>
-          <Redirect exact from="/" to="/resources/ethereum/all" />
-          <Redirect exact from="/resources" to="/resources/ethereum/all" />
-          <Redirect exact from="/resources/:category" to="/resources/:category/all" />
-          <Route
-            path="/resources/:category/:topic"
-            render={() => <Resources openDrawer={open} toggleDrawer={toggleDrawer} />}
-          />
-          <Route path="/workspaces">
-            <Workspaces openDrawer={open} toggleDrawer={toggleDrawer} />
-          </Route>
-        </Switch>
+        <main style={{ flexGrow: 1 }}>
+          <Switch>
+            <Redirect exact from="/" to="/resources/ethereum/all" />
+            <Redirect exact from="/resources" to="/resources/ethereum/all" />
+            <Redirect exact from="/resources/:category" to="/resources/:category/all" />
+            <Route
+              path="/resources/:category/:topic"
+              render={() => <Resources openDrawer={open} toggleDrawer={toggleDrawer} />}
+            />
+            <Route path="/workspaces">
+              <Workspaces openDrawer={open} toggleDrawer={toggleDrawer} />
+            </Route>
+          </Switch>
+        </main>
       </div>
     </Router>
   );

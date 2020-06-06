@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
-    backgroundColor: '#3a506b',
+    backgroundColor: '#212d40',
     zIndex: theme.zIndex.drawer - 1,
   },
   toolbar: {

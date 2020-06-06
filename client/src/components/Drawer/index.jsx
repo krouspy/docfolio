@@ -6,6 +6,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -77,7 +78,7 @@ const Sidebar = ({ open, toggle }) => {
     >
       <div className={classes.toolbar}>
         <IconButton className={classes.icon} onClick={toggle}>
-          <ChevronLeftIcon />
+          {open ? <ChevronLeftIcon /> : <ChevronRightIcon style={{ marginRight: 5 }} />}
         </IconButton>
       </div>
       <Divider />

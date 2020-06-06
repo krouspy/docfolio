@@ -76,7 +76,7 @@ export default () => {
         setWorkspace(result);
       })
       .catch(error => console.log(error));
-  }, []);
+  }, [workspaceId]);
 
   const updateContent = event => {
     const { name, value } = event.target;
