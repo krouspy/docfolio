@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 
-import Section from './Section';
-import CreateSection from './CreateSection';
-import Editable from './Editable';
-import SaveButton from './SaveButton';
 import { useSnackbar } from 'components/Hooks';
 import Snackbar from 'components/Snackbar';
 
@@ -19,27 +21,51 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: '#272c34',
     },
   },
-  head: {
+  textarea: {
+    color: 'white',
+    fontSize: 17,
+    backgroundColor: '#272c34',
+    maxWidth: '100%',
+    minWidth: '100%',
+  },
+  markdown: {
     position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
+  },
+  buttons: {
+    'position': 'absolute',
+    'top': 0,
+    'right': 0,
+    '& > *': {
+      color: 'white',
+    },
+  },
+  checkButton: {
+    'color': 'white',
+    'float': 'right',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  closeButton: {
+    'color': 'white',
+    'float': 'right',
+    '&:hover': {
+      backgroundColor: 'red',
+    },
   },
 }));
 
 export default () => {
   const classes = useStyles();
   const { workspaceId } = useParams();
-  const [data, setData] = useState({
+  const [workspace, setWorkspace] = useState({
     title: '',
     description: '',
-    sections: [],
-  });
-  // save initial workspace state to compare if there's any changes to toggle save button
-  const [save, setSave] = useState({
-    title: '',
-    description: '',
+    content: '',
   });
   const [snackbar, toggleSnackbar] = useSnackbar();
+  const [isEditing, setEditing] = useState(false);
+  const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
     const url = `/api/workspace/${workspaceId}`;
@@ -47,26 +73,21 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const result = response.result[0];
-        setData(result);
-        setSave(result);
+        setWorkspace(result);
       })
       .catch(error => console.log(error));
   }, []);
 
-  const updateHeaders = event => {
+  const updateContent = event => {
     const { name, value } = event.target;
-    setData(prevState => ({
+    setWorkspace(prevState => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const createSection = () => {
-    const url = `/api/createSection`;
-    const newSection = {
-      position: data.sections.length,
-      content: '## Edit me!',
-    };
+  const sendUpdate = () => {
+    const url = `/api/updateContent`;
     const options = {
       method: 'POST',
       headers: {
@@ -75,76 +96,64 @@ export default () => {
       },
       body: JSON.stringify({
         id: workspaceId,
-        section: newSection,
+        content: workspace.content,
       }),
     };
 
     fetch(url, options)
       .then(response => response.json())
       .then(response => {
-        const { statusCode } = response;
-        toggleSnackbar('Create section', statusCode !== 200);
-        if (statusCode === 200) {
-          setData(prevState => {
-            const sections = prevState.sections;
-            return {
-              ...prevState,
-              sections: [...sections, newSection],
-            };
-          });
-        }
+        const statusCode = response.statusCode;
+        toggleSnackbar('Update Section', statusCode !== 200);
+        setEditing(statusCode !== 200);
       })
       .catch(error => console.error(error));
   };
 
-  const updateSave = () => {
-    setSave(data);
-  };
-
-  const checkHeadersChanges = () => {
-    return data.title !== save.title || data.description !== save.description;
-  };
-
-  const update = checkHeadersChanges();
-
-  const { title, description, sections } = data;
+  const { content } = workspace;
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.head}>
-        <Editable variant="h5" text={title} updateText={updateHeaders} name="title" />
-        <Editable
-          variant="subtitle1"
-          text={description}
-          updateText={updateHeaders}
-          name="description"
-        />
-        {update && (
-          <SaveButton data={data} updateSave={updateSave} toggleSnackbar={toggleSnackbar} />
-        )}
-      </Paper>
-      {(sections || []).map((section, index) => {
-        return (
-          <Section
-            key={index}
-            section={section}
-            workspaceId={workspaceId}
-            toggleSnackbar={toggleSnackbar}
-            setData={setData}
+    <Paper
+      className={classes.root}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+    >
+      {isEditing ? (
+        <div>
+          <TextareaAutosize
+            name="content"
+            rowsMin={35}
+            value={content}
+            onChange={updateContent}
+            className={classes.textarea}
           />
-        );
-      })}
-      <CreateSection
-        createSection={createSection}
-        workspaceId={workspaceId}
-        toggleSnackbar={toggleSnackbar}
-      />
+          <div>
+            <IconButton onClick={sendUpdate} className={classes.checkButton}>
+              <CheckIcon />
+            </IconButton>
+            <IconButton onClick={() => setEditing(false)} className={classes.closeButton}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </div>
+      ) : (
+        <div className={classes.markdown}>
+          <Markdown source={content} />
+          {isVisible && (
+            <div className={classes.buttons}>
+              <IconButton onClick={() => setEditing(true)}>
+                <EditIcon />
+              </IconButton>
+            </div>
+          )}
+        </div>
+      )}
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
         text={snackbar.text}
         error={snackbar.error}
       />
-    </div>
+    </Paper>
   );
 };

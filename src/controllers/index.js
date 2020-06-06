@@ -54,47 +54,14 @@ const create_workspace = (req, res) => {
   insert_document(COL_WORKSPACES, query, res);
 };
 
-const create_section = (req, res) => {
-  const { id, section } = req.body;
-  const filter = { id: parseInt(id) };
-  const query = {
-    $push: {
-      sections: section,
-    },
+const update_content = (req, res) => {
+  const { id, content } = req.body;
+  const filter = {
+    id: parseInt(id),
   };
-  update_document(COL_WORKSPACES, filter, query, res);
-};
-
-const update_headers = (req, res) => {
-  const { id, title, description } = req.body;
-  const filter = { id: parseInt(id) };
   const query = {
     $set: {
-      title,
-      description,
-    },
-  };
-  update_document(COL_WORKSPACES, filter, query, res);
-};
-
-const update_one_section = (req, res) => {
-  const { id, section } = req.body;
-  const { position, content } = section;
-  const filter = { 'id': parseInt(id), 'sections.position': parseInt(position) };
-  const query = {
-    $set: {
-      'sections.$.content': content,
-    },
-  };
-  update_document(COL_WORKSPACES, filter, query, res);
-};
-
-const delete_one_section = (req, res) => {
-  const { id, position } = req.body;
-  const filter = { id: parseInt(id) };
-  const query = {
-    $pull: {
-      sections: { position },
+      content,
     },
   };
   update_document(COL_WORKSPACES, filter, query, res);
@@ -108,8 +75,5 @@ module.exports = {
   find_workspace,
   add_resource,
   create_workspace,
-  create_section,
-  update_headers,
-  update_one_section,
-  delete_one_section,
+  update_content,
 };

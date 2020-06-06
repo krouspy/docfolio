@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
   },
   drawerOpen: {
     width: drawerWidth,
-    // backgroundColor: '#133262',
     backgroundColor: '#3a506b',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -31,7 +30,6 @@ const useStyles = makeStyles(theme => ({
     }),
   },
   drawerClose: {
-    // backgroundColor: '#133262',
     backgroundColor: '#3a506b',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
