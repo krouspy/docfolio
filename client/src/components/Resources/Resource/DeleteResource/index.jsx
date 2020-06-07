@@ -16,9 +16,10 @@ const useStyles = makeStyles(theme => ({
   deleteIcon: {
     'position': 'absolute',
     'zIndex': 1,
-    'right': theme.spacing(2),
+    'right': theme.spacing(7),
+    'bottom': 22,
     '&:hover': {
-      backgroundColor: '#577590',
+      color: '#e63946',
     },
   },
 }));
@@ -29,7 +30,7 @@ const DeleteResource = ({ deleteResource }) => {
 
   return (
     <React.Fragment>
-      <IconButton color="secondary" className={classes.deleteIcon} onClick={toggleOpen}>
+      <IconButton size="small" className={classes.deleteIcon} onClick={toggleOpen}>
         <DeleteIcon />
       </IconButton>
       <Dialog open={open} onClose={toggleOpen}>

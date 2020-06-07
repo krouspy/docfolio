@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
 import MicroLink from '@microlink/react';
 import Grid from '@material-ui/core/Grid';
 
 import DeleteResource from './DeleteResource';
 
-const useStyles = makeStyles({
-  card: {
-    position: 'relative',
-  },
-});
+const style = {
+  position: 'relative',
+};
 
 const Resource = ({ url, id, setData, toggleSnackbar }) => {
-  const classes = useStyles();
   const [isVisible, setVisible] = useState(false);
 
   const deleteResource = () => {
@@ -48,7 +44,7 @@ const Resource = ({ url, id, setData, toggleSnackbar }) => {
         xs={12}
         sm={6}
         md={4}
-        className={classes.card}
+        style={style}
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
       >
@@ -63,6 +59,7 @@ Resource.propTypes = {
   url: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   setData: PropTypes.func.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 export default Resource;
