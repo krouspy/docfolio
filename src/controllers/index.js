@@ -1,4 +1,10 @@
-const { find_documents, find_distinct_documents, insert_document, update_document } = require('./queries');
+const {
+  find_documents,
+  find_distinct_documents,
+  insert_document,
+  update_document,
+  find_headings_of_workspace,
+} = require('./queries');
 
 const COL_RESOURCES = process.env.COL_RESOURCES;
 const COL_WORKSPACES = process.env.COL_WORKSPACES;
@@ -54,6 +60,14 @@ const create_workspace = (req, res) => {
   insert_document(COL_WORKSPACES, query, res);
 };
 
+const get_headings = (req, res) => {
+  const { workspaceId } = req.params;
+  const query = {
+    id: parseInt(workspaceId),
+  };
+  find_headings_of_workspace(COL_WORKSPACES, res, query);
+};
+
 const update_content = (req, res) => {
   const { id, content } = req.body;
   const filter = {
@@ -73,6 +87,7 @@ module.exports = {
   find_topic,
   find_workspaces,
   find_workspace,
+  get_headings,
   add_resource,
   create_workspace,
   update_content,

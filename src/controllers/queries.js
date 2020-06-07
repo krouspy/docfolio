@@ -4,6 +4,36 @@ const assert = require('assert').strict;
 const MONGO_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.DB_NAME;
 
+const find_headings_of_workspace = (collectionName, res, query) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Content: MongoClient failed',
+      });
+      return;
+    }
+    const collection = client.db(DB_NAME).collection(collectionName);
+    collection.find(query, { projection: { _id: 0, content: 1 } }).toArray((error, docs) => {
+      assert.equal(null, error);
+      client.close();
+      const content = docs[0].content;
+      const lines = content.split('\n');
+      const headings = lines.filter(line => {
+        // remove start spaces in case user inserted some => will be detected as headings otherwise
+        line = line.trimStart();
+        return line[0] === '#';
+      });
+      const result = headings.map(heading => heading.substring(2));
+      res.send({
+        statusCode: 200,
+        result,
+      });
+    });
+  });
+};
+
 const find_documents = (collectionName, res, query) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
@@ -118,6 +148,7 @@ const update_document = (collectionName, filter, query, res) => {
 module.exports = {
   find_documents,
   find_distinct_documents,
+  find_headings_of_workspace,
   insert_document,
   update_document,
 };
