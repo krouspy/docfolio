@@ -155,7 +155,7 @@ const delete_document = (collectionName, query, res) => {
     }
 
     const collection = client.db(DB_NAME).collection(collectionName);
-    collection.remove(query, (error, result) => {
+    collection.removeOne(query, (error, result) => {
       if (error) {
         console.log('error', error);
         res.send({
