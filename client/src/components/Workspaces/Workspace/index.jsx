@@ -1,57 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Markdown from 'react-markdown';
-import Paper from '@material-ui/core/Paper';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import Grid from '@material-ui/core/Grid';
 
 import { useSnackbar } from 'components/Hooks';
 import Snackbar from 'components/Snackbar';
+import Markdown from './Markdown';
+import Headings from './Headings';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& > *': {
-      color: 'white',
-      margin: theme.spacing(1, 0),
-      padding: theme.spacing(2),
-      backgroundColor: '#272c34',
-    },
+    minHeight: '90%',
+    padding: theme.spacing(2, 4),
   },
-  textarea: {
-    color: 'white',
-    fontSize: 17,
-    backgroundColor: '#272c34',
-    maxWidth: '100%',
-    minWidth: '100%',
-  },
-  markdown: {
-    position: 'relative',
-  },
-  buttons: {
-    'position': 'absolute',
-    'top': 0,
-    'right': 0,
-    '& > *': {
-      color: 'white',
-    },
-  },
-  checkButton: {
-    'color': 'white',
-    'float': 'right',
-    '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
-    },
-  },
-  closeButton: {
-    'color': 'white',
-    'float': 'right',
-    '&:hover': {
-      backgroundColor: 'red',
-    },
+  headings: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
@@ -64,8 +28,6 @@ export default () => {
     content: '',
   });
   const [snackbar, toggleSnackbar] = useSnackbar();
-  const [isEditing, setEditing] = useState(false);
-  const [isVisible, setVisible] = useState(false);
 
   useEffect(() => {
     const url = `/api/workspace/${workspaceId}`;
@@ -104,8 +66,7 @@ export default () => {
       .then(response => response.json())
       .then(response => {
         const statusCode = response.statusCode;
-        toggleSnackbar('Update Section', statusCode !== 200);
-        setEditing(statusCode !== 200);
+        toggleSnackbar('Update Content', statusCode !== 200);
       })
       .catch(error => console.error(error));
   };
@@ -113,47 +74,22 @@ export default () => {
   const { content } = workspace;
 
   return (
-    <Paper
-      className={classes.root}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-    >
-      {isEditing ? (
-        <div>
-          <TextareaAutosize
-            name="content"
-            rowsMin={35}
-            value={content}
-            onChange={updateContent}
-            className={classes.textarea}
-          />
-          <div>
-            <IconButton onClick={sendUpdate} className={classes.checkButton}>
-              <CheckIcon />
-            </IconButton>
-            <IconButton onClick={() => setEditing(false)} className={classes.closeButton}>
-              <CloseIcon />
-            </IconButton>
-          </div>
-        </div>
-      ) : (
-        <div className={classes.markdown}>
-          <Markdown source={content} />
-          {isVisible && (
-            <div className={classes.buttons}>
-              <IconButton onClick={() => setEditing(true)}>
-                <EditIcon />
-              </IconButton>
-            </div>
-          )}
-        </div>
-      )}
+    <div className={classes.root}>
+      <Grid container justify="space-around" spacing={3}>
+        <Grid item xs={3} md={3} lg={3}></Grid>
+        <Grid item xs={6} md={6} lg={6}>
+          <Markdown content={content} updateContent={updateContent} sendUpdate={sendUpdate} />
+        </Grid>
+        <Grid item xs={3} md={3} lg={3} className={classes.headings}>
+          <Headings content={content} workspaceId={workspaceId} />
+        </Grid>
+      </Grid>
       <Snackbar
         open={snackbar.open}
         toggle={toggleSnackbar}
         text={snackbar.text}
         error={snackbar.error}
       />
-    </Paper>
+    </div>
   );
 };

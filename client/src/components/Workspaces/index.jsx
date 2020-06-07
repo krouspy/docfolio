@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 
 import TopBar from '../TopBar';
 import CreateWorkspace from './CreateWorkspace';
-import Wrapper from '../Wrapper';
 import Cards from './Cards';
 import Workspace from './Workspace';
 
@@ -29,16 +28,14 @@ const Workspaces = ({ openDrawer, toggleDrawer }) => {
         </Typography>
         <CreateWorkspace totalWorkspaces={workspaces.length} />
       </TopBar>
-      <Wrapper size="md">
-        <Switch>
-          <Route exact path={path}>
-            <Cards workspaces={workspaces} />
-          </Route>
-          <Route path={`${path}/:workspaceId`}>
-            <Workspace />
-          </Route>
-        </Switch>
-      </Wrapper>
+      <Switch>
+        <Route exact path={path}>
+          <Cards workspaces={workspaces} />
+        </Route>
+        <Route path={`${path}/:workspaceId`}>
+          <Workspace />
+        </Route>
+      </Switch>
     </React.Fragment>
   );
 };
