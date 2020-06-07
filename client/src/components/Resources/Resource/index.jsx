@@ -3,23 +3,14 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import MicroLink from '@microlink/react';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 
-const useStyles = makeStyles(theme => ({
+import DeleteResource from './DeleteResource';
+
+const useStyles = makeStyles({
   card: {
     position: 'relative',
   },
-  deleteIcon: {
-    'position': 'absolute',
-    'zIndex': 1,
-    'right': theme.spacing(2),
-    '&:hover': {
-      color: '#ef233c',
-      backgroundColor: '#577590',
-    },
-  },
-}));
+});
 
 const Resource = ({ url, id, setData, toggleSnackbar }) => {
   const classes = useStyles();
@@ -51,22 +42,20 @@ const Resource = ({ url, id, setData, toggleSnackbar }) => {
   };
 
   return (
-    <Grid
-      item
-      xs={12}
-      sm={6}
-      md={4}
-      className={classes.card}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-    >
-      {isVisible && (
-        <IconButton className={classes.deleteIcon} onClick={deleteResource}>
-          <DeleteIcon />
-        </IconButton>
-      )}
-      <MicroLink url={url} size="large" />
-    </Grid>
+    <React.Fragment>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        className={classes.card}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+      >
+        {isVisible && <DeleteResource deleteResource={deleteResource} />}
+        <MicroLink url={url} size="large" />
+      </Grid>
+    </React.Fragment>
   );
 };
 
