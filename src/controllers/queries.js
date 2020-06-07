@@ -105,12 +105,10 @@ const insert_document = (collectionName, query, res) => {
         });
         return;
       }
-      const result = response.ops[0];
-      delete result._id;
 
       res.send({
         statusCode: 200,
-        result,
+        result: response.ops[0],
       });
     });
   });
