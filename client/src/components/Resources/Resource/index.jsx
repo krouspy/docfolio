@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Resource = ({ url, id }) => {
+const Resource = ({ url, id, setData, toggleSnackbar }) => {
   const classes = useStyles();
   const [isVisible, setVisible] = useState(false);
 
@@ -37,9 +37,16 @@ const Resource = ({ url, id }) => {
         id: id,
       }),
     };
+
     fetch(url, options)
       .then(response => response.json())
-      .then(response => console.log(response))
+      .then(response => {
+        const statusCode = response.statusCode;
+        if (statusCode === 200) {
+          setData(prevState => prevState.filter(element => element._id !== id));
+        }
+        toggleSnackbar('Delete resource', response.statusCode !== 200);
+      })
       .catch(error => console.error(error));
   };
 
@@ -66,6 +73,7 @@ const Resource = ({ url, id }) => {
 Resource.propTypes = {
   url: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  setData: PropTypes.func.isRequired,
 };
 
 export default Resource;

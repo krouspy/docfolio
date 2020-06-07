@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSnackbar } from 'components/Hooks';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,16 +11,14 @@ import LinkIcon from '@material-ui/icons/Link';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import EditableSelect from './EditableSelect';
-import Snackbar from 'components/Snackbar';
 
-const AddForm = ({ categories, topics }) => {
+const AddForm = ({ categories, topics, setData, toggleSnackbar }) => {
   const [resource, setResource] = useState({
     category: '',
     topic: '',
     url: '',
   });
   const [open, setOpen] = useState(false);
-  const [snackbar, toggleSnackbar] = useSnackbar('Add Resource');
 
   const add = () => {
     const { category, topic, url } = resource;
@@ -39,8 +36,12 @@ const AddForm = ({ categories, topics }) => {
       fetch(postURL, options)
         .then(response => response.json())
         .then(response => {
+          const { statusCode, result } = response;
           setOpen(false);
-          toggleSnackbar('Add Resource', response.statusCode !== 200);
+          if (statusCode === 200) {
+            setData(prevState => prevState.concat(result));
+          }
+          toggleSnackbar('Add resource', statusCode !== 200);
         })
         .catch(error => console.error(error));
     } else {
@@ -79,10 +80,8 @@ const AddForm = ({ categories, topics }) => {
             handleChange={handleChange}
             helper
           />
-
           {/* Topic */}
           <EditableSelect name="topic" list={topics} value={topic} handleChange={handleChange} />
-
           {/* url */}
           <TextField
             name="url"
@@ -111,13 +110,6 @@ const AddForm = ({ categories, topics }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* Snackbar */}
-      <Snackbar
-        open={snackbar.open}
-        toggle={toggleSnackbar}
-        text={snackbar.text}
-        error={snackbar.error}
-      />
     </React.Fragment>
   );
 };
@@ -125,6 +117,8 @@ const AddForm = ({ categories, topics }) => {
 AddForm.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.string),
   topics: PropTypes.arrayOf(PropTypes.string),
+  setData: PropTypes.func.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 export default AddForm;

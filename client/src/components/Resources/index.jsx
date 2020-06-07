@@ -11,6 +11,8 @@ import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
 import Resource from './Resource';
 import CustomNavLink from 'components/CustomNavLink';
+import Snackbar from 'components/Snackbar';
+import { useSnackbar } from 'components/Hooks';
 
 const useStyles = makeStyles(theme => ({
   categories: {
@@ -27,6 +29,7 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [snackbar, toggleSnackbar] = useSnackbar();
   const { category, topic } = useParams();
 
   useEffect(() => {
@@ -69,7 +72,12 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
             </Typography>
           ))}
         </div>
-        <AddForm categories={categories} topics={topics.filter(topic => topic !== 'all')} />
+        <AddForm
+          categories={categories}
+          topics={topics.filter(topic => topic !== 'all')}
+          setData={setData}
+          toggleSnackbar={toggleSnackbar}
+        />
       </TopBar>
       <TopicsBar openDrawer={openDrawer}>
         <div className={classes.categories}>
@@ -83,10 +91,23 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
       <Wrapper size="lg">
         <Grid container spacing={4}>
           {data.map((element, id) => (
-            <Resource key={id} url={element.url} id={element._id} />
+            <Resource
+              key={id}
+              url={element.url}
+              id={element._id}
+              setData={setData}
+              toggleSnackbar={toggleSnackbar}
+            />
           ))}
         </Grid>
       </Wrapper>
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        toggle={toggleSnackbar}
+        text={snackbar.text}
+        error={snackbar.error}
+      />
     </React.Fragment>
   );
 };
