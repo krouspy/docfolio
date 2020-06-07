@@ -1,9 +1,11 @@
+const ObjectID = require('mongodb').ObjectID;
 const {
   find_documents,
   find_distinct_documents,
   insert_document,
   update_document,
   find_headings_of_workspace,
+  delete_document,
 } = require('./queries');
 
 const COL_RESOURCES = process.env.COL_RESOURCES;
@@ -81,6 +83,14 @@ const update_content = (req, res) => {
   update_document(COL_WORKSPACES, filter, query, res);
 };
 
+const delete_resource = (req, res) => {
+  const { id } = req.body;
+  const query = {
+    _id: new ObjectID(id),
+  };
+  delete_document(COL_RESOURCES, query, res);
+};
+
 module.exports = {
   find_categories,
   find_topics,
@@ -91,4 +101,5 @@ module.exports = {
   add_resource,
   create_workspace,
   update_content,
+  delete_resource,
 };

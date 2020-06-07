@@ -1,31 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import MicroLink from '@microlink/react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import Wrapper from '../Wrapper';
 import TopBar from '../TopBar';
 import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
-import Wrapper from '../Wrapper';
+import Resource from './Resource';
 import CustomNavLink from 'components/CustomNavLink';
 
 const useStyles = makeStyles(theme => ({
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#133262',
-    color: 'white',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   categories: {
     display: 'flex',
     justifyContent: 'center',
@@ -96,9 +83,7 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
       <Wrapper size="lg">
         <Grid container spacing={4}>
           {data.map((element, id) => (
-            <Grid item key={id} xs={12} sm={6} md={4}>
-              <MicroLink url={element.url} size="large" />
-            </Grid>
+            <Resource key={id} url={element.url} id={element._id} />
           ))}
         </Grid>
       </Wrapper>

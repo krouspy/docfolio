@@ -45,7 +45,7 @@ const find_documents = (collectionName, res, query) => {
       return;
     }
     const collection = client.db(DB_NAME).collection(collectionName);
-    collection.find(query, { projection: { _id: 0 } }).toArray((error, docs) => {
+    collection.find(query).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
       res.send({
@@ -145,10 +145,40 @@ const update_document = (collectionName, filter, query, res) => {
   });
 };
 
+const delete_document = (collectionName, query, res) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) {
+      console.log(err);
+      res.send({
+        statusCode: 500,
+        result: 'Error Insert: MongoClient failed',
+      });
+      return;
+    }
+
+    const collection = client.db(DB_NAME).collection(collectionName);
+    collection.remove(query, (error, result) => {
+      if (error) {
+        console.log('error', error);
+        res.send({
+          statusCode: 500,
+          result: 'Error Update: update route',
+        });
+        return;
+      }
+      res.send({
+        statusCode: 200,
+        result: 'Update successful',
+      });
+    });
+  });
+};
+
 module.exports = {
   find_documents,
   find_distinct_documents,
   find_headings_of_workspace,
   insert_document,
   update_document,
+  delete_document,
 };
