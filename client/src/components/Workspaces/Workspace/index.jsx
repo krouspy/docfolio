@@ -12,10 +12,15 @@ const useStyles = makeStyles(theme => ({
   root: {
     minHeight: '90%',
     padding: theme.spacing(2, 4),
+    display: 'flex',
+  },
+  grid: {
+    display: 'flex',
+    // justifyContent: 'center',
   },
   headings: {
     display: 'flex',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
 }));
 
@@ -75,7 +80,7 @@ export default () => {
 
   return (
     <div className={classes.root}>
-      <Grid container justify="space-around" spacing={3}>
+      <Grid container justify="space-around" spacing={3} className={classes.grid}>
         <Grid item xs={3} md={3} lg={3}></Grid>
         <Grid item xs={6} md={6} lg={6}>
           <Markdown content={content} updateContent={updateContent} sendUpdate={sendUpdate} />

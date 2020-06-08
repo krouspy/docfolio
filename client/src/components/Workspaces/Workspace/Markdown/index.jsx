@@ -11,11 +11,12 @@ import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
   paper: {
+    'backgroundColor': '#272c34',
+    'height': '100%',
     '& > *': {
       color: 'white',
       margin: theme.spacing(1, 0),
       padding: theme.spacing(2),
-      backgroundColor: '#272c34',
     },
   },
   textarea: {
@@ -67,7 +68,7 @@ const Markdown = ({ content, updateContent, sendUpdate }) => {
         <div>
           <TextareaAutosize
             name="content"
-            rowsMin={35}
+            rowsMin={38}
             value={content}
             onChange={updateContent}
             className={classes.textarea}

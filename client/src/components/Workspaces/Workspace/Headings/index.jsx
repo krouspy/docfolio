@@ -8,8 +8,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    'width': '100%',
-    'maxWidth': 360,
+    width: '100%',
+  },
+  list: {
     'backgroundColor': '#272c34',
     '& > *': {
       color: 'white',
@@ -38,17 +39,19 @@ const Headings = ({ workspaceId }) => {
   }, [workspaceId]);
 
   return (
-    <List
-      component="nav"
-      subheader={<ListSubheader component="div">On this page</ListSubheader>}
-      className={classes.root}
-    >
-      {headings.map((heading, index) => (
-        <ListItem key={index} button>
-          <ListItemText color="inherit" primary={heading} />
-        </ListItem>
-      ))}
-    </List>
+    <div className={classes.root}>
+      <List
+        component="nav"
+        subheader={<ListSubheader>On this page</ListSubheader>}
+        className={classes.list}
+      >
+        {headings.map((heading, index) => (
+          <ListItem key={index} button>
+            <ListItemText color="inherit" primary={heading} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
   );
 };
 
