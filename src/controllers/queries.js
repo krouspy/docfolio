@@ -18,7 +18,17 @@ const find_headings_of_workspace = (collectionName, res, query) => {
     collection.find(query, { projection: { _id: 0, content: 1 } }).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
+
       const content = docs[0].content;
+
+      if (content === undefined) {
+        res.send({
+          statusCode: 200,
+          result: [],
+        });
+        return;
+      }
+
       const lines = content.split('\n');
       const headings = lines.filter(line => {
         // remove start spaces in case user inserted some => will be detected as headings otherwise
