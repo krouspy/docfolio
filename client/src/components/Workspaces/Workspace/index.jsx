@@ -5,22 +5,23 @@ import Grid from '@material-ui/core/Grid';
 
 import { useSnackbar } from 'components/Hooks';
 import Snackbar from 'components/Snackbar';
+import Links from './Links';
 import Markdown from './Markdown';
 import Headings from './Headings';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minHeight: '90%',
-    padding: theme.spacing(2, 4),
+    minHeight: '93%',
+    padding: theme.spacing(2, 2),
     display: 'flex',
   },
   grid: {
     display: 'flex',
-    // justifyContent: 'center',
+    borderBottom: '1px solid grey',
   },
-  headings: {
-    display: 'flex',
-    // justifyContent: 'center',
+  markdown: {
+    borderLeft: '1px solid grey',
+    borderRight: '1px solid grey',
   },
 }));
 
@@ -31,6 +32,7 @@ export default () => {
     title: '',
     description: '',
     content: '',
+    links: [],
   });
   const [snackbar, toggleSnackbar] = useSnackbar();
 
@@ -53,13 +55,22 @@ export default () => {
     }));
   };
 
-  const { content } = workspace;
+  const updateLinks = link => {
+    setWorkspace(prevState => ({
+      ...prevState,
+      links: prevState.links.concat(link),
+    }));
+  };
+
+  const { content, links } = workspace;
 
   return (
     <div className={classes.root}>
       <Grid container justify="space-around" spacing={3} className={classes.grid}>
-        <Grid item xs={3} md={3} lg={3}></Grid>
-        <Grid item xs={6} md={6} lg={6}>
+        <Grid item xs={2} md={2} lg={2}>
+          <Headings content={content} workspaceId={workspaceId} />
+        </Grid>
+        <Grid item xs={7} md={7} lg={7} className={classes.markdown}>
           <Markdown
             content={content}
             updateContent={updateContent}
@@ -67,8 +78,13 @@ export default () => {
             toggleSnackbar={toggleSnackbar}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3} className={classes.headings}>
-          <Headings content={content} workspaceId={workspaceId} />
+        <Grid item xs={3} md={3} lg={3}>
+          <Links
+            urls={links}
+            workspaceId={workspaceId}
+            updateLinks={updateLinks}
+            toggleSnackbar={toggleSnackbar}
+          />
         </Grid>
       </Grid>
       <Snackbar

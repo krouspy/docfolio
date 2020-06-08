@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import ReactMarkdown from 'react-markdown';
-import Paper from '@material-ui/core/Paper';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
@@ -10,24 +9,27 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
-  paper: {
-    'backgroundColor': '#272c34',
+  root: ({ isEditing }) => ({
+    'display': isEditing ? 'inline' : 'flex',
+    'justifyContent': 'center',
     'height': '100%',
     '& > *': {
       color: 'white',
-      margin: theme.spacing(1, 0),
-      padding: theme.spacing(2),
     },
-  },
+  }),
   textarea: {
     color: 'white',
     fontSize: 17,
     backgroundColor: '#272c34',
+    width: '100%',
     maxWidth: '100%',
     minWidth: '100%',
   },
   viewer: {
     position: 'relative',
+  },
+  markdown: {
+    fontSize: 17,
   },
   buttons: {
     'position': 'absolute',
@@ -54,9 +56,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Markdown = ({ content, updateContent, workspaceId, toggleSnackbar }) => {
-  const classes = useStyles();
   const [isVisible, setVisible] = useState(false);
   const [isEditing, setEditing] = useState(false);
+  const classes = useStyles({ isEditing });
 
   const sendUpdate = () => {
     const url = `/api/updateContent`;
@@ -83,8 +85,8 @@ const Markdown = ({ content, updateContent, workspaceId, toggleSnackbar }) => {
   };
 
   return (
-    <Paper
-      className={classes.paper}
+    <div
+      className={classes.root}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
     >
@@ -108,7 +110,7 @@ const Markdown = ({ content, updateContent, workspaceId, toggleSnackbar }) => {
         </div>
       ) : (
         <div className={classes.viewer}>
-          <ReactMarkdown source={content} />
+          <ReactMarkdown source={content} className={classes.markdown} />
           {isVisible && (
             <div className={classes.buttons}>
               <IconButton onClick={() => setEditing(true)}>
@@ -118,7 +120,7 @@ const Markdown = ({ content, updateContent, workspaceId, toggleSnackbar }) => {
           )}
         </div>
       )}
-    </Paper>
+    </div>
   );
 };
 

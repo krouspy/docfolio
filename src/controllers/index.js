@@ -91,6 +91,19 @@ const delete_resource = (req, res) => {
   delete_document(COL_RESOURCES, query, res);
 };
 
+const add_link_to_workspace = (req, res) => {
+  const { id, url } = req.body;
+  const filter = {
+    id: parseInt(id),
+  };
+  const query = {
+    $push: {
+      links: url,
+    },
+  };
+  update_document(COL_WORKSPACES, filter, query, res);
+};
+
 module.exports = {
   find_categories,
   find_topics,
@@ -102,4 +115,5 @@ module.exports = {
   create_workspace,
   update_content,
   delete_resource,
+  add_link_to_workspace,
 };

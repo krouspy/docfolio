@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   list: {
-    'backgroundColor': '#272c34',
     '& > *': {
       color: 'white',
     },
