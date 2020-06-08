@@ -53,10 +53,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Markdown = ({ content, updateContent, sendUpdate }) => {
+const Markdown = ({ content, updateContent, workspaceId, toggleSnackbar }) => {
   const classes = useStyles();
   const [isVisible, setVisible] = useState(false);
   const [isEditing, setEditing] = useState(false);
+
+  const sendUpdate = () => {
+    const url = `/api/updateContent`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: workspaceId,
+        content: content,
+      }),
+    };
+
+    fetch(url, options)
+      .then(response => response.json())
+      .then(response => {
+        const statusCode = response.statusCode;
+        toggleSnackbar('Update Content', statusCode !== 200);
+        setEditing(false);
+      })
+      .catch(error => console.error(error));
+  };
 
   return (
     <Paper
@@ -101,7 +125,8 @@ const Markdown = ({ content, updateContent, sendUpdate }) => {
 Markdown.propTypes = {
   content: PropTypes.string.isRequired,
   updateContent: PropTypes.func.isRequired,
-  sendUpdate: PropTypes.func.isRequired,
+  workspaceId: PropTypes.string.isRequired,
+  toggleSnackbar: PropTypes.func.isRequired,
 };
 
 export default Markdown;

@@ -53,29 +53,6 @@ export default () => {
     }));
   };
 
-  const sendUpdate = () => {
-    const url = `/api/updateContent`;
-    const options = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: workspaceId,
-        content: workspace.content,
-      }),
-    };
-
-    fetch(url, options)
-      .then(response => response.json())
-      .then(response => {
-        const statusCode = response.statusCode;
-        toggleSnackbar('Update Content', statusCode !== 200);
-      })
-      .catch(error => console.error(error));
-  };
-
   const { content } = workspace;
 
   return (
@@ -83,7 +60,12 @@ export default () => {
       <Grid container justify="space-around" spacing={3} className={classes.grid}>
         <Grid item xs={3} md={3} lg={3}></Grid>
         <Grid item xs={6} md={6} lg={6}>
-          <Markdown content={content} updateContent={updateContent} sendUpdate={sendUpdate} />
+          <Markdown
+            content={content}
+            updateContent={updateContent}
+            workspaceId={workspaceId}
+            toggleSnackbar={toggleSnackbar}
+          />
         </Grid>
         <Grid item xs={3} md={3} lg={3} className={classes.headings}>
           <Headings content={content} workspaceId={workspaceId} />
