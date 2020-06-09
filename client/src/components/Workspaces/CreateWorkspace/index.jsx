@@ -54,7 +54,7 @@ const CreateWorkspace = ({ totalWorkspaces }) => {
           console.log(response);
           const { statusCode } = response;
           setOpen(false);
-          toggleSnackbar(statusCode !== 200);
+          toggleSnackbar('Create workspace', statusCode !== 200);
         })
         .catch(error => console.log(error));
     } else {

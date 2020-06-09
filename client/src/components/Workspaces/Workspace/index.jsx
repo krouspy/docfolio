@@ -12,12 +12,13 @@ import Headings from './Headings';
 const useStyles = makeStyles(theme => ({
   root: {
     minHeight: '93%',
-    padding: theme.spacing(2, 2),
+    padding: theme.spacing(2),
+    margin: theme.spacing(0, 2),
     display: 'flex',
   },
   grid: {
     display: 'flex',
-    borderBottom: '1px solid grey',
+    // borderBottom: '1px solid grey',
   },
   markdown: {
     borderLeft: '1px solid grey',
