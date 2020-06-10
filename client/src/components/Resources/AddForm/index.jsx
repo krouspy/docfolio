@@ -12,17 +12,17 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import EditableSelect from './EditableSelect';
 
-const AddForm = ({ categories, topics, setData, toggleSnackbar }) => {
+const AddForm = ({ allCategories, topics, setData, toggleSnackbar }) => {
   const [resource, setResource] = useState({
-    category: '',
+    categories: '',
     topic: '',
     url: '',
   });
   const [open, setOpen] = useState(false);
 
   const add = () => {
-    const { category, topic, url } = resource;
-    if (category && topic && url) {
+    const { categories, topic, url } = resource;
+    if (categories && topic && url) {
       const postURL = '/api/addResource';
       const options = {
         method: 'POST',
@@ -61,7 +61,7 @@ const AddForm = ({ categories, topics, setData, toggleSnackbar }) => {
     }));
   };
 
-  const { category, topic, url } = resource;
+  const { categories, topic, url } = resource;
 
   return (
     <React.Fragment>
@@ -72,11 +72,11 @@ const AddForm = ({ categories, topics, setData, toggleSnackbar }) => {
       <Dialog open={open} onClose={handleOpen} maxWidth="xs" fullWidth>
         <DialogTitle>Add Resource</DialogTitle>
         <DialogContent dividers>
-          {/* Category */}
+          {/* Categories */}
           <EditableSelect
-            name="category"
-            list={categories}
-            value={category}
+            name="categories"
+            list={allCategories}
+            value={categories}
             handleChange={handleChange}
             helper
           />
@@ -115,7 +115,7 @@ const AddForm = ({ categories, topics, setData, toggleSnackbar }) => {
 };
 
 AddForm.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.string),
+  allCategories: PropTypes.arrayOf(PropTypes.string),
   topics: PropTypes.arrayOf(PropTypes.string),
   setData: PropTypes.func.isRequired,
   toggleSnackbar: PropTypes.func.isRequired,

@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import Wrapper from '../Wrapper';
-import TopBar from '../TopBar';
+import Wrapper from 'components/Wrapper';
+import TopBar from 'components/TopBar';
 import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
 import Resource from './Resource';
@@ -73,7 +73,7 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
           ))}
         </div>
         <AddForm
-          categories={categories}
+          allCategories={categories}
           topics={topics.filter(topic => topic !== 'all')}
           setData={setData}
           toggleSnackbar={toggleSnackbar}

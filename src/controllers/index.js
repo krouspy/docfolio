@@ -12,7 +12,7 @@ const COL_RESOURCES = process.env.COL_RESOURCES;
 const COL_WORKSPACES = process.env.COL_WORKSPACES;
 
 const find_categories = (_, res) => {
-  const key = 'category';
+  const key = 'categories';
   const filter = {};
   find_distinct_documents(COL_RESOURCES, key, filter, res);
 };
@@ -20,7 +20,7 @@ const find_categories = (_, res) => {
 const find_topics = (req, res) => {
   const key = 'topic';
   const filter = {
-    category: req.params.category,
+    categories: req.params.category,
   };
   find_distinct_documents(COL_RESOURCES, key, filter, res);
 };
@@ -28,7 +28,7 @@ const find_topics = (req, res) => {
 const find_topic = (req, res) => {
   const { category, topic } = req.params;
   const query = {
-    category: category,
+    categories: category,
   };
   if (topic !== 'all') {
     query.topic = topic;
@@ -50,9 +50,9 @@ const find_workspace = (req, res) => {
 
 const add_resource = (req, res) => {
   const { url } = req.body;
-  const category = req.body.category.toLowerCase();
+  const categories = req.body.categories.toLowerCase();
   const topic = req.body.topic.toLowerCase();
-  const query = { url, category, topic };
+  const query = { url, categories, topic };
   insert_document(COL_RESOURCES, query, res);
 };
 
