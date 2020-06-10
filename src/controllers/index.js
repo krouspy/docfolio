@@ -33,19 +33,19 @@ const find_topic = (req, res) => {
   if (topic !== 'all') {
     query.topic = topic;
   }
-  find_documents(COL_RESOURCES, res, query);
+  find_documents(COL_RESOURCES, query, res);
 };
 
 const find_workspaces = (_, res) => {
   const query = {};
-  find_documents(COL_WORKSPACES, res, query);
+  find_documents(COL_WORKSPACES, query, res);
 };
 
 const find_workspace = (req, res) => {
   const query = {
     id: parseInt(req.params.workspaceId),
   };
-  find_documents(COL_WORKSPACES, res, query);
+  find_documents(COL_WORKSPACES, query, res);
 };
 
 const add_resource = (req, res) => {

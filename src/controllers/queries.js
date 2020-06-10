@@ -44,7 +44,7 @@ const find_headings_of_workspace = (collectionName, res, query) => {
   });
 };
 
-const find_documents = (collectionName, res, query) => {
+const find_documents = (collectionName, query, res) => {
   MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
@@ -76,6 +76,7 @@ const find_distinct_documents = (collectionName, key, filter, res) => {
       });
       return;
     }
+
     const collection = client.db(DB_NAME).collection(collectionName);
     collection.distinct(key, filter, (error, result) => {
       if (error) {
@@ -88,7 +89,7 @@ const find_distinct_documents = (collectionName, key, filter, res) => {
       }
       res.send({
         statusCode: 200,
-        result: result,
+        result: result.sort(),
       });
     });
   });
