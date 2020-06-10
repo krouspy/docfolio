@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
     'color': 'white',
     'height': 47,
     'border': '1px dashed grey',
+    'marginRight': theme.spacing(1),
     '& > *': {
       margin: theme.spacing(1),
     },
@@ -76,7 +77,7 @@ const Links = ({ urls, workspaceId, updateLinks, toggleSnackbar }) => {
             <MicroLink
               url={url}
               size="small"
-              style={{ backgroundColor: 'black', color: 'white' }}
+              style={{ 'backgroundColor': 'black', 'color': 'white', 'max-width': '98%' }}
             />
           </Grid>
         ))}
