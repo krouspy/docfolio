@@ -58,7 +58,7 @@ const add_resource = (req, res) => {
 
 const create_workspace = (req, res) => {
   const { id, title, description } = req.body;
-  const query = { id, title, description, content: '', links: [] };
+  const query = { id, title, description, content: 'Edit me!', links: [] };
   insert_document(COL_WORKSPACES, query, res);
 };
 

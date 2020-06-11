@@ -58,6 +58,7 @@ const Links = ({ urls, workspaceId, updateLinks, toggleSnackbar }) => {
         const statusCode = response.statusCode;
         if (statusCode === 200) {
           updateLinks(link);
+          setLink('');
         }
         toggleSnackbar('Add Source', statusCode !== 200);
         toggleOpen();
