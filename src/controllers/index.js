@@ -6,6 +6,7 @@ const {
   update_document,
   find_headings_of_workspace,
   delete_document,
+  authentication,
 } = require('./queries');
 
 const COL_RESOURCES = process.env.COL_RESOURCES;
@@ -105,6 +106,13 @@ const add_link_to_workspace = (req, res) => {
   update_document(COL_WORKSPACES, filter, query, res);
 };
 
+const login = (email, password, done) => {
+  const query = {
+    email,
+  };
+  authentication(COL_USERS, query, password, done);
+};
+
 const register_user = (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   const query = {
@@ -129,4 +137,5 @@ module.exports = {
   delete_resource,
   add_link_to_workspace,
   register_user,
+  login,
 };

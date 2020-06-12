@@ -183,6 +183,20 @@ const delete_document = (collectionName, query, res) => {
   });
 };
 
+const authentication = (collectionName, query, password, done) => {
+  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+    if (err) return done(err);
+    const collection = client.db(DB_NAME).collection(collectionName);
+    collection.findOne(query, (error, user) => {
+      console.log(user);
+      if (error) return done(err);
+      if (!user || user.password !== password) return done(null, false);
+      client.close();
+      return done(null, { user });
+    });
+  });
+};
+
 module.exports = {
   find_documents,
   find_distinct_documents,
@@ -190,4 +204,5 @@ module.exports = {
   insert_document,
   update_document,
   delete_document,
+  authentication,
 };

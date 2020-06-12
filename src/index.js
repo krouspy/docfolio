@@ -1,13 +1,17 @@
 require('dotenv').config();
 const express = require('express');
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const routes = require('./routes/index');
+
+require('./config/passport')(passport);
+const routes = require('./routes/index')(express, passport);
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+app.use(passport.initialize());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
