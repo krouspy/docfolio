@@ -10,6 +10,7 @@ const {
 
 const COL_RESOURCES = process.env.COL_RESOURCES;
 const COL_WORKSPACES = process.env.COL_WORKSPACES;
+const COL_USERS = process.env.COL_USERS;
 
 const find_categories = (_, res) => {
   const key = 'categories';
@@ -104,6 +105,17 @@ const add_link_to_workspace = (req, res) => {
   update_document(COL_WORKSPACES, filter, query, res);
 };
 
+const register_user = (req, res) => {
+  const { firstname, lastname, email, password } = req.body;
+  const query = {
+    firstname,
+    lastname,
+    email,
+    password,
+  };
+  insert_document(COL_USERS, query, res);
+};
+
 module.exports = {
   find_categories,
   find_topics,
@@ -116,4 +128,5 @@ module.exports = {
   update_content,
   delete_resource,
   add_link_to_workspace,
+  register_user,
 };

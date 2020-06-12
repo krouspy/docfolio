@@ -11,6 +11,7 @@ router.post('/addResource', controller.add_resource);
 router.post('/createWorkspace', controller.create_workspace);
 router.post('/updateContent', controller.update_content);
 router.post('/addSource', controller.add_link_to_workspace);
+router.post('/registerUser', controller.register_user);
 router.delete('/resource/delete/:id', controller.delete_resource);
 
 module.exports = router;
