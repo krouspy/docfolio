@@ -1,4 +1,5 @@
 const ObjectID = require('mongodb').ObjectID;
+const { COL_RESOURCES, COL_WORKSPACES, COL_USERS } = require('../config/mongo');
 const {
   find_documents,
   find_distinct_documents,
@@ -8,10 +9,6 @@ const {
   delete_document,
   authentication,
 } = require('./queries');
-
-const COL_RESOURCES = process.env.COL_RESOURCES;
-const COL_WORKSPACES = process.env.COL_WORKSPACES;
-const COL_USERS = process.env.COL_USERS;
 
 const find_categories = (_, res) => {
   const key = 'categories';

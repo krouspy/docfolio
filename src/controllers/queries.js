@@ -1,11 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert').strict;
-
-const MONGO_URI = process.env.MONGODB_URI;
-const DB_NAME = process.env.DB_NAME;
+const { MONGODB_URI, DB_NAME } = require('../config/mongo');
 
 const find_headings_of_workspace = (collectionName, res, query) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -45,7 +43,7 @@ const find_headings_of_workspace = (collectionName, res, query) => {
 };
 
 const find_documents = (collectionName, query, res) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -67,7 +65,7 @@ const find_documents = (collectionName, query, res) => {
 };
 
 const find_distinct_documents = (collectionName, key, filter, res) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -96,7 +94,7 @@ const find_distinct_documents = (collectionName, key, filter, res) => {
 };
 
 const insert_document = (collectionName, query, res) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -126,7 +124,7 @@ const insert_document = (collectionName, query, res) => {
 };
 
 const update_document = (collectionName, filter, query, res) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -155,7 +153,7 @@ const update_document = (collectionName, filter, query, res) => {
 };
 
 const delete_document = (collectionName, query, res) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) {
       console.log(err);
       res.send({
@@ -184,15 +182,14 @@ const delete_document = (collectionName, query, res) => {
 };
 
 const authentication = (collectionName, query, password, done) => {
-  MongoClient.connect(MONGO_URI, { useUnifiedTopology: true }, (err, client) => {
+  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
     if (err) return done(err);
     const collection = client.db(DB_NAME).collection(collectionName);
     collection.findOne(query, (error, user) => {
-      console.log(user);
       if (error) return done(err);
       if (!user || user.password !== password) return done(null, false);
       client.close();
-      return done(null, { user });
+      return done(null, user);
     });
   });
 };

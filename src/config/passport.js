@@ -5,7 +5,8 @@ module.exports = passport => {
   passport.use('login', new LocalStrategy({ usernameField: 'email' }, login));
 
   passport.serializeUser((user, done) => {
-    done(null, 10);
+    console.log(user);
+    done(null, user._id);
   });
 
   passport.deserializeUser((id, done) => {
