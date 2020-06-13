@@ -1,48 +1,40 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Drawer from './Drawer';
-import Resources from './Resources';
-import Workspaces from './Workspaces';
+import { AuthContext } from '../context';
+import PrivateRoute from './PrivateRoute';
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    minHeight: '100vh',
-    backgroundColor: '#1e2732',
-  },
-});
+import Layout from './Layout';
+import Login from './Login';
 
 export default () => {
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const tokens = JSON.parse(localStorage.getItem('tokens'));
+  const [authTokens, setAuthTokens] = useState(tokens);
+  console.log(tokens);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
+  const setTokens = data => {
+    localStorage.setItem('tokens', JSON.stringify(data));
+    setAuthTokens(data);
   };
 
   return (
-    <Router>
-      <div className={classes.root}>
-        <CssBaseline />
-        <Drawer open={open} toggle={toggleDrawer} />
-        <main style={{ flexGrow: 1 }}>
-          <Switch>
-            <Redirect exact from="/" to="/resources/ethereum/all" />
-            <Redirect exact from="/resources" to="/resources/ethereum/all" />
-            <Redirect exact from="/resources/:category" to="/resources/:category/all" />
-            <Route
-              path="/resources/:category/:topic"
-              render={() => <Resources openDrawer={open} toggleDrawer={toggleDrawer} />}
-            />
-            <Route path="/workspaces">
-              <Workspaces openDrawer={open} toggleDrawer={toggleDrawer} />
-            </Route>
-          </Switch>
-        </main>
-      </div>
-    </Router>
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+      <CssBaseline />
+      <Router>
+        <Switch>
+          <Redirect exact from="/" to="/resources/ethereum/all" />
+          <Redirect exact from="/resources" to="/resources/ethereum/all" />
+          <Redirect exact from="/resources/:category" to="/resources/:category/all" />
+
+          <Route exact path="/sign-in" component={Login} />
+          <Route exact path="/sign-up" component={Login} />
+          <Route path="/resources/:category/:topic" component={Layout} />
+          {/* <Route path="/workspaces" component={Layout} /> */}
+          {/* <PrivateRoute path="/resources/:category/:topic" component={Layout} /> */}
+          <PrivateRoute path="/workspaces" component={Layout} />
+        </Switch>
+      </Router>
+    </AuthContext.Provider>
   );
 };
