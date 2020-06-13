@@ -1,18 +1,138 @@
-const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert').strict;
-const { MONGODB_URI, DB_NAME } = require('../config/mongo');
+const mongoClient = require('./mongoClient');
 
-const find_headings_of_workspace = (collectionName, res, query) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
+const find_documents = (collectionName, query, res) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(erro);
       res.send({
         statusCode: 500,
-        result: 'Error Content: MongoClient failed',
+        result: 'Error: Get Documents',
       });
       return;
     }
-    const collection = client.db(DB_NAME).collection(collectionName);
+
+    collection.find(query).toArray((error, docs) => {
+      assert.equal(null, error);
+      client.close();
+      res.send({
+        statusCode: 200,
+        result: docs,
+      });
+    });
+  });
+};
+
+const find_distinct_documents = (collectionName, key, filter, res) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(error);
+      res.send({
+        statusCode: 500,
+        result: 'Error: Get Distinct Documents',
+      });
+    }
+
+    collection.distinct(key, filter, (error, result) => {
+      assert.equal(null, error);
+      client.close();
+      res.send({
+        statusCode: 200,
+        result: result.sort(),
+      });
+    });
+  });
+};
+
+const insert_document = (collectionName, query, res) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(error);
+      res.send({ statusCode: 500, result: 'Error: Insert Document' });
+    }
+
+    collection.insertOne(query, (error, response) => {
+      assert.equal(null, error);
+      client.close();
+
+      res.send({
+        statusCode: 200,
+        result: response.ops[0],
+      });
+    });
+  });
+};
+
+const update_document = (collectionName, filter, query, res) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(error);
+      res.send({
+        statusCode: 500,
+        result: 'Error: Update Document',
+      });
+      return;
+    }
+
+    collection.updateOne(filter, query, (error, result) => {
+      assert.equal(null, error);
+      client.close();
+
+      res.send({
+        statusCode: 200,
+        result: 'Update successful',
+      });
+    });
+  });
+};
+
+const delete_document = (collectionName, query, res) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(error);
+      res.send({
+        statusCode: 500,
+        result: 'Error: Delete Document',
+      });
+      return;
+    }
+
+    collection.removeOne(query, (error, result) => {
+      assert.equal(null, error);
+      client.close();
+
+      res.send({
+        statusCode: 200,
+        result: 'Update successful',
+      });
+    });
+  });
+};
+
+const authentication = (collectionName, query, password, done) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) return done(error);
+
+    collection.findOne(query, (error, user) => {
+      if (error) return done(err);
+      if (!user || user.password !== password) return done(null, false);
+      client.close();
+      return done(null, user);
+    });
+  });
+};
+
+const find_headings_of_workspace = (collectionName, res, query) => {
+  mongoClient(collectionName, (error, client, collection) => {
+    if (error) {
+      console.error(error);
+      res.send({
+        statusCode: 500,
+        result: 'Error: Find Headings',
+      });
+      return;
+    }
+
     collection.find(query, { projection: { _id: 0, content: 1 } }).toArray((error, docs) => {
       assert.equal(null, error);
       client.close();
@@ -38,158 +158,6 @@ const find_headings_of_workspace = (collectionName, res, query) => {
         statusCode: 200,
         result,
       });
-    });
-  });
-};
-
-const find_documents = (collectionName, query, res) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Categories: MongoClient failed',
-      });
-      return;
-    }
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.find(query).toArray((error, docs) => {
-      assert.equal(null, error);
-      client.close();
-      res.send({
-        statusCode: 200,
-        result: docs,
-      });
-    });
-  });
-};
-
-const find_distinct_documents = (collectionName, key, filter, res) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Categories: MongoClient failed',
-      });
-      return;
-    }
-
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.distinct(key, filter, (error, result) => {
-      if (error) {
-        console.log(error);
-        res.send({
-          statusCode: 500,
-          result: 'Error Categories: MongoClient failed',
-        });
-        return;
-      }
-      res.send({
-        statusCode: 200,
-        result: result.sort(),
-      });
-    });
-  });
-};
-
-const insert_document = (collectionName, query, res) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Insert: MongoClient failed',
-      });
-      return;
-    }
-
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.insertOne(query, (error, response) => {
-      if (error) {
-        console.log('error', error);
-        res.send({
-          statusCode: 500,
-          result: 'Error Insert: insertOne route',
-        });
-        return;
-      }
-
-      res.send({
-        statusCode: 200,
-        result: response.ops[0],
-      });
-    });
-  });
-};
-
-const update_document = (collectionName, filter, query, res) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Insert: MongoClient failed',
-      });
-      return;
-    }
-
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.updateOne(filter, query, (error, result) => {
-      if (error) {
-        console.log('error', error);
-        res.send({
-          statusCode: 500,
-          result: 'Error Update: update route',
-        });
-        return;
-      }
-      res.send({
-        statusCode: 200,
-        result: 'Update successful',
-      });
-    });
-  });
-};
-
-const delete_document = (collectionName, query, res) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        statusCode: 500,
-        result: 'Error Insert: MongoClient failed',
-      });
-      return;
-    }
-
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.removeOne(query, (error, result) => {
-      if (error) {
-        console.log('error', error);
-        res.send({
-          statusCode: 500,
-          result: 'Error Update: update route',
-        });
-        return;
-      }
-      res.send({
-        statusCode: 200,
-        result: 'Update successful',
-      });
-    });
-  });
-};
-
-const authentication = (collectionName, query, password, done) => {
-  MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true }, (err, client) => {
-    if (err) return done(err);
-    const collection = client.db(DB_NAME).collection(collectionName);
-    collection.findOne(query, (error, user) => {
-      if (error) return done(err);
-      if (!user || user.password !== password) return done(null, false);
-      client.close();
-      return done(null, user);
     });
   });
 };
