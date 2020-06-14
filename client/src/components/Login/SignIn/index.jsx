@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -42,9 +41,13 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = () => {
   const classes = useStyles();
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
   const [user, setUser] = useState({
-    email: 'knjlau1@gmail.com',
-    password: '1234',
+    email: '',
+    password: '',
   });
   const { setAuthTokens } = useAuth();
 
@@ -57,9 +60,9 @@ const SignIn = () => {
   };
 
   const login = event => {
+    event.preventDefault();
     const { email, password } = user;
     if (email !== '' && password !== '') {
-      event.preventDefault();
       const url = '/api/login';
       const options = {
         method: 'POST',
@@ -83,20 +86,30 @@ const SignIn = () => {
             const param = arr[arr.length - 1];
             if (param === '') {
               setAuthTokens('docfolio');
+            } else {
+              setError({
+                isError: true,
+                message: 'Incorrect email or password',
+              });
             }
+          } else {
+            setError({
+              isError: true,
+              message: 'Incorrect email or password',
+            });
           }
         })
         .catch(console.error);
     } else {
-      alert('Error');
+      setError({
+        isError: true,
+        message: 'Please fill all fields',
+      });
     }
   };
 
-  if (localStorage.getItem('docfolio-token')) {
-    return <Redirect to="/" />;
-  }
-
   const { email, password } = user;
+  const { isError, message } = error;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -115,6 +128,7 @@ const SignIn = () => {
             label="Email"
             value={email}
             onChange={handleChange}
+            helperText={isError && message}
             variant="outlined"
             margin="normal"
             required
@@ -126,6 +140,7 @@ const SignIn = () => {
             label="Password"
             value={password}
             onChange={handleChange}
+            helperText={isError && message}
             variant="outlined"
             margin="normal"
             required

@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
@@ -15,6 +16,10 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
   const classes = useStyles();
+
+  if (localStorage.getItem('docfolio-token')) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className={classes.root}>

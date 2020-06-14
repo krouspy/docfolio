@@ -9,6 +9,9 @@ const CustomTextField = withStyles({
     '& label.Mui-focused': {
       color: '#ffff',
     },
+    '& p': {
+      color: 'red',
+    },
     '& .MuiOutlinedInput-root': {
       'color': '#ffff',
       '& fieldset': {

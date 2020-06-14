@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import CustomTextField from '../CustomTextField';
+import { useAuth } from '../../../context';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -36,12 +37,17 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = () => {
   const classes = useStyles();
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
   const [user, setUser] = useState({
     firstname: '',
     lastname: '',
     email: '',
     password: '',
   });
+  const { setAuthTokens } = useAuth();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -52,9 +58,9 @@ const SignUp = () => {
   };
 
   const registerUser = event => {
+    event.preventDefault();
     const { firstname, lastname, email, password } = user;
     if (firstname !== '' && lastname !== '' && email !== '' && password !== '') {
-      event.preventDefault();
       const url = '/api/registerUser';
       const options = {
         method: 'POST',
@@ -67,14 +73,27 @@ const SignUp = () => {
 
       fetch(url, options)
         .then(response => response.json())
-        .then(response => console.log(response))
+        .then(response => {
+          if (response.statusCode === 200) {
+            setAuthTokens('docfolio');
+          } else {
+            setError({
+              isError: true,
+              message: 'An error occured',
+            });
+          }
+        })
         .catch(console.error);
     } else {
-      alert('Error');
+      setError({
+        isError: true,
+        message: 'All fields are required',
+      });
     }
   };
 
   const { firstname, lastname, email, password } = user;
+  const { isError, message } = error;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -94,6 +113,7 @@ const SignUp = () => {
                 variant="outlined"
                 value={firstname}
                 onChange={handleChange}
+                helperText={isError && message}
                 autoFocus
                 required
                 fullWidth
@@ -106,6 +126,7 @@ const SignUp = () => {
                 variant="outlined"
                 value={lastname}
                 onChange={handleChange}
+                helperText={isError && message}
                 required
                 fullWidth
               />
@@ -117,6 +138,7 @@ const SignUp = () => {
                 variant="outlined"
                 value={email}
                 onChange={handleChange}
+                helperText={isError && message}
                 required
                 fullWidth
               />
@@ -128,6 +150,7 @@ const SignUp = () => {
                 variant="outlined"
                 value={password}
                 onChange={handleChange}
+                helperText={isError && message}
                 type="password"
                 required
                 fullWidth

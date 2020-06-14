@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Wrapper from 'components/Wrapper';
 import TopBar from 'components/TopBar';
+import SignOut from 'components/Login/SignOut';
 import TopicsBar from './TopicsBar';
 import AddForm from './AddForm';
 import Resource from './Resource';
@@ -72,12 +73,15 @@ const Resources = ({ openDrawer, toggleDrawer }) => {
             </Typography>
           ))}
         </div>
-        <AddForm
-          allCategories={categories}
-          topics={topics.filter(topic => topic !== 'all')}
-          setData={setData}
-          toggleSnackbar={toggleSnackbar}
-        />
+        <div>
+          <AddForm
+            allCategories={categories}
+            topics={topics.filter(topic => topic !== 'all')}
+            setData={setData}
+            toggleSnackbar={toggleSnackbar}
+          />
+          <SignOut />
+        </div>
       </TopBar>
       <TopicsBar openDrawer={openDrawer}>
         <div className={classes.categories}>

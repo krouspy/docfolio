@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
-import TopBar from '../TopBar';
+import TopBar from 'components/TopBar';
+import SignOut from 'components/Login/SignOut';
 import CreateWorkspace from './CreateWorkspace';
 import Cards from './Cards';
 import Workspace from './Workspace';
@@ -26,7 +27,10 @@ const Workspaces = ({ openDrawer, toggleDrawer }) => {
         <Typography variant="h6" noWrap>
           Workspaces
         </Typography>
-        <CreateWorkspace totalWorkspaces={workspaces.length} />
+        <div>
+          <CreateWorkspace totalWorkspaces={workspaces.length} />
+          <SignOut />
+        </div>
       </TopBar>
       <Switch>
         <Route exact path={path}>
