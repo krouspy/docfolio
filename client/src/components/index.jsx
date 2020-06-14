@@ -9,12 +9,11 @@ import Layout from './Layout';
 import Login from './Login';
 
 export default () => {
-  const tokens = JSON.parse(localStorage.getItem('tokens'));
-  const [authTokens, setAuthTokens] = useState(tokens);
-  console.log(tokens);
+  const token = JSON.parse(localStorage.getItem('docfolio-token'));
+  const [authTokens, setAuthTokens] = useState(token);
 
   const setTokens = data => {
-    localStorage.setItem('tokens', JSON.stringify(data));
+    localStorage.setItem('docfolio-token', JSON.stringify(data));
     setAuthTokens(data);
   };
 
@@ -29,9 +28,7 @@ export default () => {
 
           <Route exact path="/sign-in" component={Login} />
           <Route exact path="/sign-up" component={Login} />
-          <Route path="/resources/:category/:topic" component={Layout} />
-          {/* <Route path="/workspaces" component={Layout} /> */}
-          {/* <PrivateRoute path="/resources/:category/:topic" component={Layout} /> */}
+          <PrivateRoute path="/resources/:category/:topic" component={Layout} />
           <PrivateRoute path="/workspaces" component={Layout} />
         </Switch>
       </Router>

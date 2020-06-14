@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -46,7 +46,6 @@ const SignIn = () => {
     email: 'knjlau1@gmail.com',
     password: '1234',
   });
-  const history = useHistory();
   const { setAuthTokens } = useAuth();
 
   const handleChange = event => {
@@ -76,9 +75,15 @@ const SignIn = () => {
 
       fetch(url, options)
         .then(response => {
-          if (response.status === 200) {
-            setAuthTokens('hello');
-            history.push('/');
+          const { status, url } = response;
+          // very bad error handling => didn't manage to send error 401 in response when authentication fails with passportjs
+          // but sending a redirect url is working so i'm using this as a flag
+          if (status === 200) {
+            const arr = url.split('/');
+            const param = arr[arr.length - 1];
+            if (param === '') {
+              setAuthTokens('docfolio');
+            }
           }
         })
         .catch(console.error);
@@ -86,6 +91,10 @@ const SignIn = () => {
       alert('Error');
     }
   };
+
+  if (localStorage.getItem('docfolio-token')) {
+    return <Redirect to="/" />;
+  }
 
   const { email, password } = user;
 
