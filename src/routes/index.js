@@ -15,7 +15,7 @@ module.exports = (express, passport) => {
   router.post('/addSource', controller.add_link_to_workspace);
   router.post('/registerUser', controller.register_user);
   router.delete('/resource/delete/:id', controller.delete_resource);
-  router.post('/login', passport.authenticate('login', { successRedirect: '/', failureRedirect: '/sign-up' }));
+  router.post('/login', passport.authenticate('login', { successRedirect: '/', failureRedirect: '/sign-in' }));
 
   return router;
 };

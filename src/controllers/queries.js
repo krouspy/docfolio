@@ -114,8 +114,15 @@ const authentication = (collectionName, query, password, done) => {
     if (error) return done(error);
 
     collection.findOne(query, (error, user) => {
-      if (error) return done(err);
-      if (!user || user.password !== password) return done(null, false);
+      if (error) return done(error);
+      if (!user) {
+        console.log('no user');
+        return done(null, false, { message: 'User non-existent' });
+      }
+      if (user.password !== password) {
+        console.log('wrong pass');
+        return done(null, false, { message: 'Wrong Password' });
+      }
       client.close();
       return done(null, user);
     });
