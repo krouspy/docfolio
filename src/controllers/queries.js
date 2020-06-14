@@ -4,7 +4,7 @@ const mongoClient = require('./mongoClient');
 const find_documents = (collectionName, query, res) => {
   mongoClient(collectionName, (error, client, collection) => {
     if (error) {
-      console.error(erro);
+      console.error(error);
       res.send({
         statusCode: 500,
         result: 'Error: Get Documents',

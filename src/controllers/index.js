@@ -51,13 +51,13 @@ const add_resource = (req, res) => {
   const { url } = req.body;
   const categories = req.body.categories.toLowerCase();
   const topic = req.body.topic.toLowerCase();
-  const query = { url, categories, topic };
+  const query = { url, categories, topic, created: new Date() };
   insert_document(COL_RESOURCES, query, res);
 };
 
 const create_workspace = (req, res) => {
   const { id, title, description } = req.body;
-  const query = { id, title, description, content: 'Edit me!', links: [] };
+  const query = { id, title, description, content: 'Edit me!', links: [], created: new Date() };
   insert_document(COL_WORKSPACES, query, res);
 };
 
@@ -117,6 +117,7 @@ const register_user = (req, res) => {
     lastname,
     email,
     password,
+    created: new Date(),
   };
   insert_document(COL_USERS, query, res);
 };

@@ -11,10 +11,11 @@ const routes = require('./routes/index')(express, passport);
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-app.use(passport.initialize());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
