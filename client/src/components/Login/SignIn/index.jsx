@@ -85,7 +85,10 @@ const SignIn = () => {
             const arr = url.split('/');
             const param = arr[arr.length - 1];
             if (param === '') {
-              setAuthTokens('docfolio');
+              setAuthTokens({
+                value: 'docfolio',
+                timestamp: new Date().getTime(),
+              });
             } else {
               setError({
                 isError: true,

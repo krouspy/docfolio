@@ -75,7 +75,10 @@ const SignUp = () => {
         .then(response => response.json())
         .then(response => {
           if (response.statusCode === 200) {
-            setAuthTokens('docfolio');
+            setAuthTokens({
+              value: 'docfolio',
+              timestamp: new Date().getTime(),
+            });
           } else {
             setError({
               isError: true,
