@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   deleteIcon: {
     'position': 'absolute',
     'zIndex': 1,
-    'right': theme.spacing(7),
+    'right': theme.spacing(3),
     'bottom': 22,
     '&:hover': {
       color: '#e63946',

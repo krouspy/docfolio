@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import MicroLink from '@microlink/react';
+import { ReactTinyLink } from 'react-tiny-link';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/AddCircle';
 import Button from '@material-ui/core/Button';
@@ -75,10 +75,10 @@ const Links = ({ urls, workspaceId, updateLinks, toggleSnackbar }) => {
       <Grid container spacing={1} direction="column">
         {urls.map((url, index) => (
           <Grid key={index} item>
-            <MicroLink
+            <ReactTinyLink
               url={url}
-              size="small"
-              style={{ backgroundColor: 'black', color: 'white', maxWidth: '97%' }}
+              cardSize="small"
+              // style={{ backgroundColor: 'black', color: 'white', maxWidth: '97%' }}
             />
           </Grid>
         ))}

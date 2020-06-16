@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import MicroLink from '@microlink/react';
+import { ReactTinyLink } from 'react-tiny-link';
 import Grid from '@material-ui/core/Grid';
 
 import DeleteResource from './DeleteResource';
@@ -49,7 +49,7 @@ const Resource = ({ url, id, setData, toggleSnackbar }) => {
         onMouseLeave={() => setVisible(false)}
       >
         {isVisible && <DeleteResource deleteResource={deleteResource} />}
-        <MicroLink url={url} size="large" />
+        <ReactTinyLink url={url} cardSize="large" />
       </Grid>
     </React.Fragment>
   );
