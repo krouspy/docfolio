@@ -156,7 +156,7 @@ const find_headings_of_workspace = (collectionName, res, query) => {
 
       const lines = content.split('\n');
       const headings = lines.filter(line => {
-        // remove start spaces in case user inserted some => will be detected as headings otherwise
+        // remove start spaces in case user inserted some => will not be detected as headings otherwise
         line = line.trimStart();
         return line[0] === '#';
       });
