@@ -49,7 +49,7 @@ const Resource = ({ url, id, setData, toggleSnackbar }) => {
         onMouseLeave={() => setVisible(false)}
       >
         {isVisible && <DeleteResource deleteResource={deleteResource} />}
-        <ReactTinyLink url={url} cardSize="large" />
+        <ReactTinyLink showGraphic={true} maxLine={2} minLine={1} cardSize="large" url={url} />
       </Grid>
     </React.Fragment>
   );
